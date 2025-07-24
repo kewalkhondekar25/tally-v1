@@ -9,16 +9,21 @@
     "dev": "pnpm run build && pnpm run start"
   },
   "dependencies": {
+    "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/cors": "^2.8.19",
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.3",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
-    "@repo/db": "workspace:*"
+    "jsonwebtoken": "^9.0.2"
   },
   "keywords": [],
   "author": "Kewal Khondekar",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10"
+  }
 }

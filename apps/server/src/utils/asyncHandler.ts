@@ -5,6 +5,7 @@ const asyncHandler = <T extends (req: Request, res: Response, next: NextFunction
     try {
       await func(req, res, next);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   };

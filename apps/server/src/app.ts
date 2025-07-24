@@ -11,7 +11,10 @@ app.use(cors({ origin: process.env.CORS_ORIGIN}));
 
 //routes
 import healthRouter from "./router/health.router";
+import authRouter from "./router/auth.router";
+
 app.use("/api/v1/health", healthRouter);
+app.use("/api/v1/auth", authRouter);
 
 app.get("/", (req, res) => {
     res.status(200).json({
