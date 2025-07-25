@@ -48,7 +48,12 @@ const login: RequestHandler = asyncHandler( async (req, res) => {
 
     const token = generateToken(user.id, user.email);
     
-    return res.status(200).json(new apiResponse(
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+    
+    return res.status(200).cookie("accessToken", token, options).json(new apiResponse(
         true,
         200,
         "User Logged In Successfully",
@@ -56,7 +61,23 @@ const login: RequestHandler = asyncHandler( async (req, res) => {
     ));
 });
 
+const logout: RequestHandler = asyncHandler( async (req, res) => {
+    
+    const options = {
+        httpOnly: true,
+        secure: true
+    };
+    return res.status(200).clearCookie("accessToken", options).json(
+        new apiResponse(
+            true,
+            200,
+            "User logged out succefully"
+        )
+    );
+});
+
 export {
     register,
-    login
+    login,
+    logout
 };
