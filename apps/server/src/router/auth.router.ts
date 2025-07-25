@@ -1,11 +1,13 @@
 import { Router } from "express";
 import { login, logout, register } from "../controller/auth.controller";
 import { verifyJwt } from "../middleware/auth.middleware";
+import { loginUserSchema, registerUserSchema } from "@repo/common/validation";
+import { validate } from "../middleware/validatation.middleware";
 
 const router: Router = Router();
 
-router.route("/register").post(register);
-router.route("/login").post(login);
+router.route("/register").post(validate(registerUserSchema), register);
+router.route("/login").post(validate(loginUserSchema), login);
 router.route("/logout").post(verifyJwt, logout);
 
 export default router;

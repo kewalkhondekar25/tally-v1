@@ -1,0 +1,25 @@
+{
+  "name": "@repo/common",
+  "version": "1.0.0",
+  "description": "common packages library",
+  "main": "index.js",
+  "exports": {
+    "./validation": "./src/validation.ts"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "keywords": [
+    "zod",
+    "validation",
+    "schemas"
+  ],
+  "author": "Kewal Khondekar",
+  "license": "ISC",
+  "dependencies": {
+    "zod": "^4.0.10"
+  }
+}

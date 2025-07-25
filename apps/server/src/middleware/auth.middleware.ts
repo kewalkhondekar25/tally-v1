@@ -3,7 +3,7 @@ import { apiError } from "../utils/errorHandler";
 import { verifyToken } from "../utils/jwt";
 import * as userService from "../service/auth.service";
 import { JwtPayload } from "jsonwebtoken";
-import { Request, RequestHandler } from "express";
+import { RequestHandler } from "express";
 
 interface Payload extends JwtPayload {
     id: string;
