@@ -57,7 +57,7 @@ const login: RequestHandler = asyncHandler( async (req, res) => {
         true,
         200,
         "User Logged In Successfully",
-        token
+        { token }
     ));
 });
 
