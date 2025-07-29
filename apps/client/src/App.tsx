@@ -1,13 +1,19 @@
-import './App.css'
+import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Landing from './pages/Landing';
+import { Signup, Login} from "./pages/Signup";
 
 function App() {
 
   return (
-    <div>
-      <h1 className=''>
-        Kewal’s Programming & Full Stack Development RoadMap
-      </h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Landing/>} />
+        <Route path='signup' element={<Signup/>}/>
+        <Route path='login' element={<Login/>}/>
+        <Route path='*' element={<h3>Route Not Found</h3>}/>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
