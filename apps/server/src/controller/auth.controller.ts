@@ -76,8 +76,19 @@ const logout: RequestHandler = asyncHandler( async (req, res) => {
     );
 });
 
+const getAuthUser: RequestHandler = asyncHandler ( async (req, res) => {
+    const user = (req as any).user;
+    return res.status(200).json(new apiResponse(
+        true,
+        200,
+        "Auth userr fetched successfully",
+        user
+    ));
+});
+
 export {
     register,
     login,
-    logout
+    logout,
+    getAuthUser
 };

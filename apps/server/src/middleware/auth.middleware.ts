@@ -13,7 +13,6 @@ interface Payload extends JwtPayload {
 const verifyJwt: RequestHandler = asyncHandler( async (req, res, next) => {
 
     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
-    console.log("token", token);
     
     if(!token){
         throw apiError("Unauthorized or Expired Token", 401);
@@ -27,8 +26,8 @@ const verifyJwt: RequestHandler = asyncHandler( async (req, res, next) => {
     };
 
     (req as any).user = {
-        id: user.id,
-        email: user.email
+        id: tokenPayload?.id,
+        email: tokenPayload?.email
     };
 
     next();
