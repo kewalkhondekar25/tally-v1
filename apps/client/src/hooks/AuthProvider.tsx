@@ -18,7 +18,6 @@ const AuthProvider = () => {
                     url: "/auth/me"
                 });
                 const email = response.data.email;
-                console.log(email);
                 if(email){
                     dispatch(setUser({ email}))
                 }
