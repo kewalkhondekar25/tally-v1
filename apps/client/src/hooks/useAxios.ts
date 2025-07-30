@@ -23,7 +23,8 @@ const useAxios = async ({ method, url, data}: { method: axiosMethod, url: string
     const response: AxiosResponse<axiosResponse> = await axios({
         method,
         url: `${baseUrl}${url}`,
-        data
+        data,
+        withCredentials: true
     });
     return response.data;
    } catch (error) {
