@@ -2,7 +2,9 @@ import React from 'react'
 
 const DashboardComponent = () => {
   return (
-    <div>Dashboard</div>
+    <div className='min-h-screen w-full'>
+      Dashboard
+    </div>
   )
 }
 
