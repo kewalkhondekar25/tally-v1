@@ -1,19 +1,17 @@
 import { useAppSelector } from "@/store/hooks";
-import { useEffect, type JSX } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectRoute = ({ children }: { children: JSX.Element }) => {
+const ProtectRoute = () => {
 
-    const { email } = useAppSelector(store => store.auth);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if(!email){
-            navigate("/login");
-        };
-    }, [email, navigate]);
-
-    return <>{children}</> 
+    const user = useAppSelector(store => store.auth);
+    if(!user.isUserLoaded){
+        return null;
+    };  
+    
+    if(!user.email){
+        return <Navigate to="/login" replace/>
+    }
+    return <Outlet/>
 };
 
 export default ProtectRoute;

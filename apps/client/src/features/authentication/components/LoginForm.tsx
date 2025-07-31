@@ -8,11 +8,14 @@ import { authSchema, type AuthFormDataType } from "@/validations/auth.validation
 import { Loader2Icon } from "lucide-react";
 import { loginService } from "../services/auth";
 import { toast } from "sonner";
+import { useAppDispatch } from "@/store/hooks";
+import SetCookie from "@/utils/cookie";
 
 
 const LoginForm = () => {
 
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const {
         register,
@@ -31,8 +34,9 @@ const LoginForm = () => {
         try {
             const response = await loginService(payload);
             if(response.statusCode === 200){
+                await SetCookie(dispatch);
                 toast(response.message);
-                navigate("/");
+                navigate("/dashboard");
             }
         } catch (error: any) {
             console.log(error);

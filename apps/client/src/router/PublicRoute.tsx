@@ -1,21 +1,18 @@
 import { useAppSelector } from "@/store/hooks";
-import type React from "react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+const PublicRoute = () => {
 
-    const { email } = useAppSelector(store => store.auth);
-    const navigate = useNavigate();
-    console.log(navigate);
+    const user = useAppSelector(store => store.auth);
+    if(!user.isUserLoaded){
+        return null;
+    };
 
-    useEffect(() => {
-        if(email){
-            navigate("/dashboard");
-        };
-    }, [email, navigate]);
+    if(user.email){
+        return <Navigate to="/dashboard" replace/>
+    };
 
-    return <>{children}</>
+    return <Outlet/>
 };
 
 export default PublicRoute;
