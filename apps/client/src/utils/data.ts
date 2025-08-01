@@ -45,14 +45,14 @@ const navLinks: NavLinkType[] = [
     name: "trash",
     icon: Trash2,
   },
-  {
-    name: "Dark Mode",
-    icon: MoonStar,
-  },
-  {
-    name: "logout",
-    icon: LogOut,
-  },
+  // {
+  //   name: "Dark Mode",
+  //   icon: MoonStar,
+  // },
+  // {
+  //   name: "logout",
+  //   icon: LogOut,
+  // },
 ];
 
 export default navLinks;

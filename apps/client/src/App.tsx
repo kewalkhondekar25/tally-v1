@@ -11,7 +11,6 @@ import { useEffect } from 'react';
 import PublicRoute from './router/PublicRoute';
 import Sidebar from './components/sidebar/Sidebar';
 
-
 function App() {
   
   const dispatch = useAppDispatch();

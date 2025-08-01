@@ -11,8 +11,8 @@ const Sidebar = () => {
 
   return (
     <div 
-        className='min-h-screen min-w-screen bg-white p-3 text-gray-400
-        transform transition-transform duration-300'>
+        className='min-h-screen min-w-screen bg-white px-3 py-3 text-gray-400
+        relative'>
         <PanelLeftClose onClick={() => dispatch(closeSidebar())}/>
         <Navbar/> 
         <Console/>   
