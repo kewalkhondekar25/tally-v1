@@ -104,3 +104,33 @@ describe("Login User", () => {
         expect(res.body.message).toBe("Invalid email or password")
     });
 });
+
+describe("User logout", () => {
+
+    beforeEach(async() => {
+        await prisma.user.deleteMany();
+        await request(app).post(`${BACKEND_URL}/register`).send(testUser);
+    });
+
+    let cookie: string | undefined;
+
+    it("Should logged in", async () => {
+        const res = await request(app).post(`${BACKEND_URL}/login`).send(testUser);
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe("User Logged In Successfully");
+        const cookies = res.headers['set-cookie'];
+        cookie = res.headers['set-cookie'];
+        expect(cookies).toBeDefined();
+        if(Array.isArray(cookies)){
+            expect(cookies?.some(cookie => cookie.startsWith("accessToken="))).toBe(true);
+        }else{
+            expect(cookies?.startsWith("accessToken=ey")).toBe(true);
+        }
+    });
+
+    it("Should logged out", async () => {
+        const res = await request(app).post(`${BACKEND_URL}/logout`).set('Cookie', cookie!);
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe("User logged out succefully");
+    });
+})
