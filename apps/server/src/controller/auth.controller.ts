@@ -82,7 +82,7 @@ const getAuthUser: RequestHandler = asyncHandler ( async (req, res) => {
         true,
         200,
         "Auth userr fetched successfully",
-        user
+        user.email
     ));
 });
 

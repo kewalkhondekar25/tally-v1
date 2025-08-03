@@ -26,7 +26,7 @@ const verifyJwt: RequestHandler = asyncHandler( async (req, res, next) => {
     };
 
     (req as any).user = {
-        id: tokenPayload?.id,
+        id: tokenPayload?.userId,
         email: tokenPayload?.email
     };
 

@@ -1,9 +1,11 @@
+import dotenv from "dotenv";
+dotenv.config();
 import request from "supertest";
 import app from "../app";
 import prisma from "@repo/db/client"
 
 const BACKEND_URL = "/api/v1/auth";
-process.env.JWT_SECRET ??= "test_secret_value";
+// process.env.JWT_SECRET ??= "test_secret_value";
 
 const testUser = {
     email: "walter.white@breakingbad.com",

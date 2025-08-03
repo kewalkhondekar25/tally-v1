@@ -18,9 +18,11 @@ app.use(cookieParser());
 //routes
 import healthRouter from "./router/health.router";
 import authRouter from "./router/auth.router";
+import workspaceRouter from "./router/workspace.router";
 
 app.use("/api/v1/health", healthRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/workspace", workspaceRouter);
 
 app.get("/", (req, res) => {
     res.status(200).json({
