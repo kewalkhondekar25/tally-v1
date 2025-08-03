@@ -21,36 +21,39 @@ const deleteDb = async () => {
     ]);
 };
 
+let cookie: string | undefined;
+
 beforeAll(async() => {
-    await prisma.user.deleteMany();
-    await prisma.workspace.deleteMany();
-    await prisma.file.deleteMany();
+    await deleteDb();
+    await request(app).post(`${BACKEND_URL}/auth/register`).send(testUser);
+    const loginRes = await request(app).post(`${BACKEND_URL}/auth/login`).send(testUser);
+    cookie = loginRes.headers["set-cookie"];
 });
 
 afterAll(async() => {
+    await deleteDb();
     await prisma.$disconnect();
 });
 
 
-describe("Workspace and file creation", () => {
+describe("Workspace CRUD operations", () => {
     
-    let cookie: string | undefined;
+    let workspaceId: string;
+    let userId:string;
     
     beforeEach(async () => {
-        await deleteDb();
-        await request(app).post(`${BACKEND_URL}/auth/register`).send(testUser);
-        const loginRes = await request(app).post(`${BACKEND_URL}/auth/login`).send(testUser);
-        cookie = loginRes.headers["set-cookie"];
+        // await deleteDb();
+        
     });
     
     it("Should create a workspace", async () => {
         
         const user = await prisma.user.findFirst();
-        const userId = user?.id;
+        userId = user?.id!;
         
         const res = await request(app).post(`${BACKEND_URL}/workspace/create`).set("Cookie", cookie!);
-        console.log("create post req", res);
-        
+        workspaceId = res.body.data.id;
+
         expect(res.status).toBe(201);
         expect(res.body.message).toBe("Workspace created successfully");
         expect(res.body.data).toEqual({
@@ -63,8 +66,62 @@ describe("Workspace and file creation", () => {
         });
     });
 
-    it("Should update workspace name", async () => {
+    it("Should fetch all workspaces", async () => {
 
-    })
-})
+        const res = await request(app).get(`${BACKEND_URL}/workspace/get-all`).set("Cookie", cookie!);
+
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe("Workspaces fetched successfully");
+        expect(Array.isArray(res.body.data)).toBe(true);
+        expect(res.body.data).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    id: expect.any(String),
+                    name: "My Workspace",
+                    userId,
+                    createdAt: expect.any(String),
+                    updatedAt: expect.any(String),
+                    files: []
+                })
+            ])
+        );
+    });
+
+    it("Should fetch a single workspace", async () => {
+
+        const res = await request(app).get(`${BACKEND_URL}/workspace/get/${workspaceId}`).set("Cookie", cookie!);
+        
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe("Workspace fetched successfully");
+        expect(res.body.data).toEqual({
+            id: workspaceId,
+            name: "My Workspace",
+            userId,
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+            files: []
+        });
+    });
+
+    it("Should update/rename workspace", async () => {
+        
+        const res = await request(app).patch(`${BACKEND_URL}/workspace/update/${workspaceId}`).send({
+            newName: "My New Workspace"
+        }).set("Cookie", cookie!);
+
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe("Workspace updated successfully");
+        expect(res.body.data).toEqual({
+            name: "My New Workspace",
+        });
+    });
+
+    it("Should delete workspace", async () => {
+        
+        const res = await request(app).delete(`${BACKEND_URL}/workspace/delete/${workspaceId}`).set("Cookie", cookie!);
+        
+        expect(res.status).toBe(200);
+        expect(res.body.message).toBe("Workspace deleted successfully");
+    });
+});
 
