@@ -8,7 +8,7 @@ const SetCookie = async (dispatch: AppDispatch) => {
             method: "GET",
             url: "/auth/me"
         });
-        const email = response.data.email;
+        const email = response.data;
         if(email){
             dispatch(setUser({ email }));
         }
