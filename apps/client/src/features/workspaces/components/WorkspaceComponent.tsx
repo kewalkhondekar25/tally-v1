@@ -29,7 +29,7 @@ const WorkspaceComponent = () => {
 
   return (
     <div>
-      <div className='flex justify-between items-center group cursor-pointer mb-2'>
+      <div className='flex justify-between items-center group cursor-pointer mt-2 mb-2'>
         <p className='text-sm font-semibold'>Workspaces</p>
         <Tooltip>
           <TooltipTrigger asChild>

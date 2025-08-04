@@ -28,4 +28,17 @@ const getAllWorkspaces = async () => {
     }
 };
 
-export { create, getAllWorkspaces };
+const deleteWorkspace = async (workspaceId: string) => {
+    try {
+        const deletedWorkspace = await useAxios({
+            method: "DELETE",
+            url: `/workspace/delete/${workspaceId}`,
+        });
+        return deletedWorkspace;
+    } catch (error) {
+        console.log(error);
+        throw error
+    }
+};
+
+export { create, getAllWorkspaces, deleteWorkspace };
