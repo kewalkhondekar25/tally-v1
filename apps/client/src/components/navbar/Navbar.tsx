@@ -38,7 +38,6 @@ const Navbar = () => {
                 }
             </nav>
             <Workspace/>
-
         </div>
     )
 }

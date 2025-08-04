@@ -31,7 +31,7 @@ const SignupForm: React.FC = () => {
         try {
             const response = await signupService(payload);
             if(response.statusCode === 201){
-                toast(response?.message);
+                toast.success(response?.message);
                 navigate("/login")
             }
         } catch (error: any) {

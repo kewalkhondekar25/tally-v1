@@ -35,7 +35,7 @@ const LoginForm = () => {
             const response = await loginService(payload);
             if(response.statusCode === 200){
                 await SetCookie(dispatch);
-                toast(response.message);
+                toast.success(response.message);
                 navigate("/dashboard");
             }
         } catch (error: any) {
