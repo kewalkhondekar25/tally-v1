@@ -19,10 +19,12 @@ app.use(cookieParser());
 import healthRouter from "./router/health.router";
 import authRouter from "./router/auth.router";
 import workspaceRouter from "./router/workspace.router";
+import formRouter from "./router/form.router";
 
 app.use("/api/v1/health", healthRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/workspace", workspaceRouter);
+app.use("/api/v1/form", formRouter);
 
 app.get("/", (req, res) => {
     res.status(200).json({

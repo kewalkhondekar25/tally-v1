@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyJwt } from "../middleware/auth.middleware";
-import { createWorkspace, deleteWorkspace, getAllWorkspaces, getWorkspace, updateWorkspace } from "../controller/workspace";
+import { createWorkspace, deleteWorkspace, getAllWorkspaces, getWorkspace, updateWorkspace } from "../controller/workspace.controller";
 
 const router: Router = Router();
 
