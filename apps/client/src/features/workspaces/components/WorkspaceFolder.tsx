@@ -10,11 +10,12 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { Ellipsis, FolderPen, Plus, Trash2 } from "lucide-react";
+import { Ellipsis, FolderPen, Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { deleteWorkspace, getAllWorkspaces } from "../service";
 import { toast } from "sonner";
 import { setWorkspaces } from "@/store/features/workspace/workspaceSlice";
+import { createForm } from "@/features/forms/service";
 
 export interface Workspace {
     id: string;
@@ -34,7 +35,6 @@ const WorkspaceFolder = () => {
     });
     console.log("workspaces", workspaces);
     const dispatch = useAppDispatch();
-    
 
     const handleDeleteWorkspace = async (workspaceId: string) => {
         try {
@@ -50,69 +50,96 @@ const WorkspaceFolder = () => {
         }
     };
 
+    const handleAddForm = async (workspaceId: string) => {
+        try {
+            const newForm = await createForm(workspaceId);
+            console.log("newForm", newForm);
+            if (newForm.statusCode === 201) {
+                const allWorkspaces = await getAllWorkspaces();
+                dispatch(setWorkspaces(allWorkspaces.data));
+                toast.success("Form created");
+            };
+        } catch (error: any) {
+            console.log();
+            toast.error(error?.response?.data?.message);
+        }
+    };
+
     if (workspaces.length < 1) {
         return <p className="text-xs">Create Workspaces</p>
     }
 
     return (
-        <div className='max-h-44 overflow-auto cursor-pointer'>
+        <div className='max-h-40 overflow-auto cursor-pointer'>
             {
-                workspaces.map((item, i) => {
+                workspaces?.map((item, i) => {
                     return (
-                        <div key={i} className="flex justify-between items-center group h-10">
-                            <Accordion type="single" collapsible className='-my-3'>
+                        <div key={i} className="flex justify-between items-center group -my-2">
+                            <Accordion type="single" collapsible className=''>
                                 <AccordionItem value="item-1">
-                                    <div className='flex items-center gap-2'>
-                                        <AccordionTrigger className='flex-none cursor-pointer'></AccordionTrigger>
-                                        <span className='text-sm text-gray-800 font-semibold'>{item.name}</span>
+                                    <div className='flex justify-between items-center w-64'>
+                                        <div className="flex items-center gap-2">
+                                            <AccordionTrigger className='flex-none cursor-pointer'></AccordionTrigger>
+                                            <span className='text-sm text-gray-800 font-semibold'>{item.name}</span>
+                                        </div>
+                                        <div className="flex">
+                                            <span className="relative">
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Ellipsis onClick={() => setIsOpen({ state: true, id: item.id })} className='h-4 opacity-100 sm:opacity-0 group-hover:opacity-100' />
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        <p>Rename, Delete</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                                {
+                                                    isOpen.state && isOpen.id === item.id && (
+                                                        <div className="absolute flex flex-col justify-center gap-1 right-0 -top-1 z-10 h-14 w-32  border rounded bg-white shadow-md">
+                                                            <span onClick={() => setIsOpen({ state: false, id: item.id })} className="relative flex items-center text-sm gap-1">
+                                                                <FolderPen className="h-5" />
+                                                                <p className="text-gray-700">Rename</p>
+                                                                <X onClick={() => setIsOpen({ state: false, id: item.id })} className="absolute right-0 top-0 h-4" />
+                                                            </span>
+                                                            <span onClick={() => { setIsOpen({ state: false, id: item.id }), handleDeleteWorkspace(item.id) }} className="flex items-center text-sm gap-1">
+                                                                <Trash2 className="h-5" />
+                                                                <p className="text-gray-700">Delete</p>
+                                                            </span>
+                                                        </div>
+                                                    )
+                                                }
+                                            </span>
+                                            <span>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Plus onClick={() => handleAddForm(item.id)} className='h-4 opacity-100 sm:opacity-0 group-hover:opacity-100' />
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        <p>New Form</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </span>
+                                        </div>
                                     </div>
-                                    {/* {
-                                    workspace.files.map((item, i) => {
-                                        return (
-                                            <AccordionContent className='ml-6 pb-2' key={i}>
-                                            Form {i + 1}
-                                            </AccordionContent>
-                                            )
-                                            })
-                                            } */}
-                                </AccordionItem>
-                            </Accordion>
-                            <div className="flex">
-                                <span className="relative">
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <Ellipsis onClick={() => setIsOpen({ state: true, id: item.id })} className='h-4 opacity-100 sm:opacity-0 group-hover:opacity-100' />
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p>Rename, Delete</p>
-                                        </TooltipContent>
-                                    </Tooltip>
                                     {
-                                        isOpen.state && isOpen.id === item.id && (
-                                            <div className="absolute right-0 -top-3 z-10 h-12 w-24 p-0.5 border rounded bg-white">
-                                                <span onClick={() => setIsOpen({ state: false, id: item.id })} className="flex items-center text-sm gap-1">
-                                                    <FolderPen className="h-5" />
-                                                    <p className="text-gray-700">Rename</p>
-                                                </span>
-                                                <span onClick={() => { setIsOpen({ state: false, id: item.id }), handleDeleteWorkspace(item.id) }} className="flex items-center text-sm gap-1">
-                                                    <Trash2 className="h-5" />
-                                                    <p className="text-gray-700">Delete</p>
-                                                </span>
+                                        item.files.map((item, i) => {
+                                            return (
+                                                <AccordionContent className='ml-6 pb-2' key={i}>
+                                                    {item.name}
+                                                </AccordionContent>
+
+                                            )
+                                        })
+                                    }
+                                    {/* {
+                                        item.id === isOpen.id && (
+                                            <div className="bg-pink-200 -mt-3 overflow-hidden h-8">
+                                               
                                             </div>
                                         )
-                                    }
-                                </span>
-                                <span>
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <Plus onClick={() => alert("file added")} className='h-4 opacity-100 sm:opacity-0 group-hover:opacity-100' />
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p>New Form</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </span>
-                            </div>
+                                    } */}
+
+                                </AccordionItem>
+                            </Accordion>
                         </div>
                     )
                 })

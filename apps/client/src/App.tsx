@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelector } from './store/hooks';
 import { useEffect } from 'react';
 import PublicRoute from './router/PublicRoute';
 import Sidebar from './components/sidebar/Sidebar';
+import { getAllWorkspaces } from './features/workspaces/service';
+import { setWorkspaces } from './store/features/workspace/workspaceSlice';
 
 function App() {
   
@@ -19,15 +21,19 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       await setCookie(dispatch);
+      const allworkspaces = await getAllWorkspaces();
+      dispatch(setWorkspaces(allworkspaces.data));
     };
     fetchUser();
-  }, []);
+  }, [isSidebarOpen]);
 
   return (
     <BrowserRouter>
       <div className='relative'>
-        <div className="absolute z-20">
-          { isSidebarOpen && <Sidebar/>}
+        <div className={`fixed transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 
+        "translate-x-0" : " -translate-x-full"} z-20`}>
+          {/* { isSidebarOpen && <Sidebar/>} */}
+          <Sidebar/>
         </div>
         <div className=''> 
           <Routes>
