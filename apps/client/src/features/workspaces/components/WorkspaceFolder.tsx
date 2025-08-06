@@ -16,6 +16,8 @@ import { deleteWorkspace, getAllWorkspaces } from "../service";
 import { toast } from "sonner";
 import { setWorkspaces } from "@/store/features/workspace/workspaceSlice";
 import { createForm } from "@/features/forms/service";
+import { useNavigate } from "react-router-dom";
+import { closeSidebar } from "@/store/features/sidebar/sidebarSlice";
 
 export interface Workspace {
     id: string;
@@ -35,6 +37,7 @@ const WorkspaceFolder = () => {
     });
     console.log("workspaces", workspaces);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const handleDeleteWorkspace = async (workspaceId: string) => {
         try {
@@ -53,11 +56,13 @@ const WorkspaceFolder = () => {
     const handleAddForm = async (workspaceId: string) => {
         try {
             const newForm = await createForm(workspaceId);
-            console.log("newForm", newForm);
+            const newFormId = newForm.data.id;
             if (newForm.statusCode === 201) {
                 const allWorkspaces = await getAllWorkspaces();
                 dispatch(setWorkspaces(allWorkspaces.data));
                 toast.success("Form created");
+                dispatch(closeSidebar())
+                navigate(`/form/${workspaceId}/${newFormId}`);
             };
         } catch (error: any) {
             console.log();

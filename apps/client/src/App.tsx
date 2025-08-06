@@ -12,6 +12,7 @@ import PublicRoute from './router/PublicRoute';
 import Sidebar from './components/sidebar/Sidebar';
 import { getAllWorkspaces } from './features/workspaces/service';
 import { setWorkspaces } from './store/features/workspace/workspaceSlice';
+import Form from './pages/Form';
 
 function App() {
   
@@ -48,6 +49,9 @@ function App() {
             </Route>
             <Route element={<ProtectRoute/>}>
               <Route path='dashboard' element={<Dashboard/>}/>
+            </Route>
+            <Route element={<ProtectRoute/>}>
+              <Route path='/form/:workspaceId/:formId' element={<Form/>}/>
             </Route>
             <Route path='*' element={<h3>Route Not Found</h3>}/>
         </Routes>
