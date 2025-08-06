@@ -70,23 +70,29 @@ const WorkspaceFolder = () => {
     }
 
     return (
-        <div className='max-h-40 overflow-auto cursor-pointer'>
+        <div className='max-h-40 overflow-auto cursor-pointer pt-3 pb-3'>
             {
                 workspaces?.map((item, i) => {
                     return (
                         <div key={i} className="flex justify-between items-center group -my-2">
-                            <Accordion type="single" collapsible className=''>
+                            <Accordion type="single" collapsible className='w-full'>
                                 <AccordionItem value="item-1">
-                                    <div className='flex justify-between items-center w-64'>
+                                    <div className='flex justify-between items-center'>
                                         <div className="flex items-center gap-2">
-                                            <AccordionTrigger className='flex-none cursor-pointer'></AccordionTrigger>
-                                            <span className='text-sm text-gray-800 font-semibold'>{item.name}</span>
+                                            <AccordionTrigger 
+                                                className='flex-none cursor-pointer'></AccordionTrigger>
+                                            <span 
+                                                className='text-sm text-gray-800 font-semibold'>{item.name}</span>
                                         </div>
                                         <div className="flex">
                                             <span className="relative">
                                                 <Tooltip>
                                                     <TooltipTrigger asChild>
-                                                        <Ellipsis onClick={() => setIsOpen({ state: true, id: item.id })} className='h-4 opacity-100 sm:opacity-0 group-hover:opacity-100' />
+                                                        <Ellipsis 
+                                                            className='h-4 opacity-100 sm:opacity-0 group-hover:opacity-100'
+                                                            onClick={() => setIsOpen({ 
+                                                            state: true, id: item.id 
+                                                        })}/>
                                                     </TooltipTrigger>
                                                     <TooltipContent>
                                                         <p>Rename, Delete</p>
@@ -94,7 +100,9 @@ const WorkspaceFolder = () => {
                                                 </Tooltip>
                                                 {
                                                     isOpen.state && isOpen.id === item.id && (
-                                                        <div className="absolute flex flex-col justify-center gap-1 right-0 -top-1 z-10 h-14 w-32  border rounded bg-white shadow-md">
+                                                        <div 
+                                                            className="absolute flex flex-col justify-center gap-1 
+                                                            right-3 -top-5 z-30 h-14 w-32  border rounded bg-white shadow-md">
                                                             <span onClick={() => setIsOpen({ state: false, id: item.id })} className="relative flex items-center text-sm gap-1">
                                                                 <FolderPen className="h-5" />
                                                                 <p className="text-gray-700">Rename</p>
