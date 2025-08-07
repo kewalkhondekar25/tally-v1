@@ -16,7 +16,7 @@ import { deleteWorkspace, getAllWorkspaces } from "../service";
 import { toast } from "sonner";
 import { setWorkspaces } from "@/store/features/workspace/workspaceSlice";
 import { createForm } from "@/features/forms/service";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { closeSidebar } from "@/store/features/sidebar/sidebarSlice";
 
 export interface Workspace {
@@ -62,7 +62,7 @@ const WorkspaceFolder = () => {
                 dispatch(setWorkspaces(allWorkspaces.data));
                 toast.success("Form created");
                 dispatch(closeSidebar())
-                navigate(`/form/${workspaceId}/${newFormId}`);
+                navigate(`/form/${workspaceId}/${newFormId}/edit`);
             };
         } catch (error: any) {
             console.log();
@@ -134,23 +134,16 @@ const WorkspaceFolder = () => {
                                         </div>
                                     </div>
                                     {
-                                        item.files.map((item, i) => {
+                                        item.files.map((items, i) => {
                                             return (
-                                                <AccordionContent className='ml-6 pb-2' key={i}>
-                                                    {item.name}
-                                                </AccordionContent>
-
+                                                <Link onClick={() => dispatch(closeSidebar())} to={`/form/${item.id}/${items.id}/edit`} key={i}>
+                                                    <AccordionContent className='ml-6 pb-2'>
+                                                        {items.name}
+                                                    </AccordionContent>
+                                                </Link>
                                             )
                                         })
                                     }
-                                    {/* {
-                                        item.id === isOpen.id && (
-                                            <div className="bg-pink-200 -mt-3 overflow-hidden h-8">
-                                               
-                                            </div>
-                                        )
-                                    } */}
-
                                 </AccordionItem>
                             </Accordion>
                         </div>
