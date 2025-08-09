@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { blocks } from '../data/blocks'
 import { useAppDispatch } from '@/store/hooks';
 import { closeBlockPicker, setBlockPickedName } from '@/store/features/blockpicker/blockerPickerSlice';
 
-const BlockPicker = () => {
+const BlockPicker = ({ indexRef }: { indexRef: React.MutableRefObject<number>}) => {
 
     const dispatch = useAppDispatch();
+    console.log("ref", indexRef);
+    
 
     const handleClick = (item: { id: number, name: string, icon: any }) => {
         console.log("selected", item.name);
-        dispatch(setBlockPickedName({ id: item.id, name: item.name }));
+        dispatch(setBlockPickedName({ id: item.id, name: item.name, index: ++indexRef.current }));
         dispatch(closeBlockPicker());
     };
 
@@ -19,7 +21,7 @@ const BlockPicker = () => {
             <div className='text-sm text-gray-400 font-semibold cursor-default py-2 px-1'>Questions</div>
             <div className='cursor-pointer'>
                 {
-                    blocks.map(item => {
+                    blocks.map((item, i) => {
                         return (
                             <div key={item.id}
                                 onClick={() => handleClick(item)}

@@ -13,6 +13,7 @@ const FormComponent = () => {
     
 
     const toolRef = useRef<HTMLInputElement | null>(null);
+    const  indexRef = useRef<number>(0);
     
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isToolOpen, setIsToolOpen] = useState(false);
@@ -105,7 +106,7 @@ const FormComponent = () => {
                             className="border-none text-gray-700 w-full
                             ring-0 focus-visible:ring-0 focus:ring-0 focus:outline-none ml-1 
                             shadow-none" />
-                        {isBlockerPickerOpen && <BlockPicker/>}
+                        {isBlockerPickerOpen && <BlockPicker indexRef={indexRef}/>}
                     </div>
                 )
             }

@@ -69,11 +69,11 @@ export const blocks = [
         name: "link",
         icon: Link
     },
-    {
-        id: 12,
-        name: "file upload",
-        icon: Upload
-    },
+    // {
+    //     id: 12,
+    //     name: "file upload",
+    //     icon: Upload
+    // },
     {
         id: 13,
         name: "date",
