@@ -1,14 +1,21 @@
 import { Input } from '@/components/ui/input';
 import { File, GripVertical, LayoutTemplate, Plus, Trash2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import BlockPicker from './BlockPicker';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { closeBlockPicker, openBlockPicker } from '@/store/features/blockpicker/blockerPickerSlice';
+import Blocks from './Blocks';
 
 const FormComponent = () => {
 
-    const params = useParams();
+    const { isBlockerPickerOpen, blockName } = useAppSelector(state => state.blockpicker);
+    const dispatch = useAppDispatch();
+    
+
+    const toolRef = useRef<HTMLInputElement | null>(null);
+    
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isToolOpen, setIsToolOpen] = useState(false);
-    const toolRef = useRef<HTMLInputElement | null>(null);
 
 
     const handleKeypress = (e: React.KeyboardEvent) => {
@@ -21,22 +28,31 @@ const FormComponent = () => {
             }, 0);
 
         };
-        // if(e.key === "/"){
-        //     setIsToolOpen(true);
-        //     setTimeout(() => {
-        //         
-        //     }, 0);
-        // }
+        if(e.key === "/"){
+            dispatch(openBlockPicker());
+        }else{
+            dispatch(closeBlockPicker());
+        }
+    };
+
+    const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.value);
+        if(e.target.value === "/"){
+            dispatch(openBlockPicker());
+        }else{
+            dispatch(closeBlockPicker());
+        }
     };
 
     useEffect(() => {
         if (isToolOpen && toolRef.current) {
             toolRef.current.focus();
+            toolRef.current.value = ""  
         }
-    }, [isToolOpen]);
+    }, [isToolOpen, blockName]);
 
     return (
-        <div className='min-h-screen min-w-screen flex flex-col items-center'
+        <div className='h-screen min-w-screen overflow-y-auto flex flex-col items-center'
             onKeyDown={handleKeypress} tabIndex={0}>
             <Input
                 className="border-none text-2xl font-bold text-gray-700 mt-20 mb-5 
@@ -70,9 +86,13 @@ const FormComponent = () => {
                     </>
                 )
             }
+
+            {/* BLOCKS */}
+            <Blocks/>
+            
             {
                 isToolOpen && (
-                    <div className='flex justify-center items-center text-gray-400'>
+                    <div className='relative flex justify-center items-center text-gray-400 mt-5 mb-10'>
                         <Trash2 className='h-4' />
                         <Plus className='h-4' />
                         <GripVertical className='h-4' />
@@ -80,12 +100,12 @@ const FormComponent = () => {
                             id='tool'
                             type="text"
                             placeholder={`Type '/ ' to insert blocks`}
-                            // readOnly
-                            // onKeyUp={(e) => e.preventDefault()}
                             ref={toolRef}
+                            onChange={handleBlockChange}
                             className="border-none text-gray-700 w-full
                             ring-0 focus-visible:ring-0 focus:ring-0 focus:outline-none ml-1 
                             shadow-none" />
+                        {isBlockerPickerOpen && <BlockPicker/>}
                     </div>
                 )
             }
