@@ -41,4 +41,39 @@ model File {
   workspaceId String
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
+  formFields FormFields[]
+  responses Responses[]
+}
+
+model FormFields {
+  id String @id @default(uuid())
+  formId String
+  file File @relation(fields: [formId], references: [id])
+  blockId Int
+  blockName String
+  blockIndex Int
+  blockQuestion String
+  blockPlaceholder String
+  blockOptions Json?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  fieldResponses FieldResponses?
+}
+
+model FieldResponses {
+  id String @id @default(uuid())
+  formFieldId String @unique
+  formField FormFields @relation(fields: [formFieldId], references: [id])
+  responsesId String @unique
+  responses Responses @relation(fields: [responsesId], references: [id])
+  answer Json
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Responses {
+  id String @id @default(uuid())
+  formId String
+  files File @relation(fields: [formId], references: [id])
+  fieldResponses FieldResponses?
 }
