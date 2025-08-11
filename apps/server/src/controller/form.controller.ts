@@ -91,7 +91,7 @@ const deleteForm: RequestHandler = asyncHandler( async (req, res) => {
     }
 
     const deletedForm = await formService.trash(formId);
-    if(!deleteForm){
+    if(!deletedForm){
         throw apiError("Failed to delete form", 404)
     }
 
@@ -102,10 +102,29 @@ const deleteForm: RequestHandler = asyncHandler( async (req, res) => {
     ));
 });
 
+const saveForm: RequestHandler = asyncHandler ( async (req, res) => {
+    
+    const payload = req.body;
+    
+    const savedForm = await formService.save(payload);
+    
+    if(savedForm.count.count < 1){
+        throw apiError("Failed to save form fields", 500)
+    }
+
+    return res.status(201).json(new apiResponse(
+        true,
+        201,
+        "Form saved successfully",
+        savedForm
+    ))
+});
+
 export { 
     createForm, 
     getAllForms, 
     getForm, 
     updateForm,
-    deleteForm 
+    deleteForm,
+    saveForm 
 };

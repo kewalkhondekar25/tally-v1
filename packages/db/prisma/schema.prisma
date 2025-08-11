@@ -53,7 +53,7 @@ model FormFields {
   blockName String
   blockIndex Int
   blockQuestion String
-  blockPlaceholder String
+  blockPlaceholder String?
   blockOptions Json?
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt

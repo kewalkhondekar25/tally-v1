@@ -4,7 +4,8 @@
   "description": "common packages library",
   "main": "index.js",
   "exports": {
-    "./validation": "./src/validation.ts"
+    "./validation": "./src/validation.ts",
+    "./types": "./src/types.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
