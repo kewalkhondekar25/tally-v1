@@ -1,22 +1,32 @@
 import { Input } from '@/components/ui/input';
-import { File, GripVertical, LayoutTemplate, Plus, Trash2 } from 'lucide-react';
+import { ArrowRight, File, GripVertical, LayoutTemplate, Plus, Trash2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import BlockPicker from './BlockPicker';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeBlockPicker, openBlockPicker } from '@/store/features/blockpicker/blockerPickerSlice';
 import Blocks from './Blocks';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@radix-ui/react-tooltip';
+import useReduxState from '@/hooks/useReduxState';
+import { useParams } from 'react-router-dom';
+import { saveForm } from '../service';
+import { toast } from 'sonner';
 
 const FormComponent = () => {
 
     const { isBlockerPickerOpen, blockName } = useAppSelector(state => state.blockpicker);
+    const { blockName: blocks } = useReduxState();
+
     const dispatch = useAppDispatch();
-    
+    const params = useParams();
+    const { formId } = params;
 
     const toolRef = useRef<HTMLInputElement | null>(null);
-    const  indexRef = useRef<number>(0);
-    
+    const indexRef = useRef<number>(0);
+
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isToolOpen, setIsToolOpen] = useState(false);
+    const [formName, setFormName] = useState("");
 
 
     const handleKeypress = (e: React.KeyboardEvent) => {
@@ -29,32 +39,72 @@ const FormComponent = () => {
             }, 0);
 
         };
-        if(e.key === "/"){
+        if (e.key === "/") {
             dispatch(openBlockPicker());
-        }else{
+        } else {
             dispatch(closeBlockPicker());
         }
     };
 
     const handleBlockChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log(e.target.value);
-        if(e.target.value === "/"){
+        if (e.target.value === "/") {
             dispatch(openBlockPicker());
-        }else{
+        } else {
             dispatch(closeBlockPicker());
+        }
+    };
+
+    const handleSaveForm = async () => {
+        console.log("clik");
+        
+        if (!formId) {
+            console.error("Form Id not provided");
+            toast.error("Form Id not provided");
+            return;
+        };
+        const payload = {
+            formId,
+            formName,
+            formData: blocks.map(item => ({
+                blockId: item.id,
+                blockName: item.name,
+                blockIndex: item.index ?? 0,
+                blockQuestion: item.question!,
+                blockPlaceholder: item.placeholder ?? undefined,
+                blockOptions: item.options ?? undefined
+            }))
+        };
+
+        try {
+            const savedForm = await saveForm(payload);
+            if(savedForm.statusCode === 201){
+                toast.success(savedForm.message);
+            };
+        } catch (error) {
+            console.log(error);
         }
     };
 
     useEffect(() => {
         if (isToolOpen && toolRef.current) {
             toolRef.current.focus();
-            toolRef.current.value = ""  
+            toolRef.current.value = ""
         }
     }, [isToolOpen, blockName]);
 
     return (
-        <div className='h-screen min-w-screen overflow-y-auto flex flex-col items-center'
+        <div className='relative h-screen min-w-screen overflow-y-auto flex flex-col items-center'
             onKeyDown={handleKeypress} tabIndex={0}>
+            {
+                blocks.length >= 1 && formName && blocks[0].question?.length! >= 1 && (
+                    <Button
+                        onClick={() => handleSaveForm()}
+                        className='absolute top-1 right-1 z-50
+                        bg-[#0070d7] h-6'>Publish</Button>
+                )
+            }
+
             <Input
                 className="border-none text-2xl font-bold text-gray-700 mt-20 mb-5 
                 ring-0 focus-visible:ring-0 focus:ring-0 focus:outline-none 
@@ -62,6 +112,7 @@ const FormComponent = () => {
                 placeholder:text-2xl placeholder:font-bold"
                 placeholder='Form title'
                 autoFocus
+                onChange={(e) => setFormName(e.target.value)}
             />
             {
                 !isEditorOpen && (
@@ -89,8 +140,8 @@ const FormComponent = () => {
             }
 
             {/* BLOCKS */}
-            <Blocks/>
-            
+            <Blocks />
+
             {
                 isToolOpen && (
                     <div className='relative flex justify-center items-center text-gray-400 mt-5 mb-10'>
@@ -106,8 +157,24 @@ const FormComponent = () => {
                             className="border-none text-gray-700 w-full
                             ring-0 focus-visible:ring-0 focus:ring-0 focus:outline-none ml-1 
                             shadow-none" />
-                        {isBlockerPickerOpen && <BlockPicker indexRef={indexRef}/>}
+                        {isBlockerPickerOpen && <BlockPicker indexRef={indexRef} />}
                     </div>
+                )
+            }
+            {
+                (isToolOpen && !isBlockerPickerOpen) && (
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button>Submit
+                                    <ArrowRight />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p className='bg-[#171717] text-white p-1 text-sm mb-1 rounded'>Forms cannot be submitted from the form builder. Use a published form to submit a response.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 )
             }
         </div>
