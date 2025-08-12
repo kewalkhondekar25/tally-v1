@@ -54,9 +54,21 @@ const FormComponent = () => {
             dispatch(closeBlockPicker());
         }
     };
-
+    
     const handleSaveForm = async () => {
-        console.log("clik");
+        
+        //check if all fields have questions?
+        const noQuestion = blocks.filter(item => !item.question);
+        if(noQuestion.length >= 1){
+            toast.error("Questions are Required!");
+            return;
+        };
+
+        const noOptions = blocks.filter(item => !item.options);
+        if(noOptions.length >= 1){
+            toast.error("Options are Required!");
+            return;
+        };
         
         if (!formId) {
             console.error("Form Id not provided");

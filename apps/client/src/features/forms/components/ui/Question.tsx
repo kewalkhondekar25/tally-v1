@@ -5,10 +5,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { setQuestion } from '@/store/features/blockpicker/blockerPickerSlice';
 
 const Question = ({ index }: { index: number }) => {
-
-    console.log("q i", index);
-    
-    
+        
     const { blockValues, setBlockValues } = useGlobalState();
     console.log("b v", blockValues);
     
