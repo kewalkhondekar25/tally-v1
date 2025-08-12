@@ -86,7 +86,22 @@ const save = async (payload: FormSaveDataType) => {
             newFormFields
         };
     })
-}
+};
+
+const getPublishedForm = async (formId: string) => {
+
+    return await serviceHandler( async () => {
+
+        const form = await prisma.file.findUnique({
+            where: { id: formId },
+            include: { 
+                formFields: true,
+            }
+        });
+
+        return form;
+    });
+};
 
 export { 
     create, 
@@ -94,5 +109,6 @@ export {
     get, 
     update, 
     trash, 
-    save 
+    save,
+    getPublishedForm
 };

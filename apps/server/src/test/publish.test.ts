@@ -4,6 +4,7 @@ import prisma from "@repo/db/client";
 import request from "supertest";
 import app from "../app";
 import { testUser } from "../utils/test";
+import { string } from "zod";
 
 const BACKEND_URL = "/api/v1";
 
@@ -180,7 +181,71 @@ describe("Add blocks into form & publish", () => {
                     updatedAt: expect.any(String)
                 }),
             ]
+        });
     });
-});
-});
 
+    it("Should fetch published form using form Id", async () => {
+
+        let fId: string;
+        let fName: string;
+
+        const res = await request(app).post(`${BACKEND_URL}/form/save`).send({
+            formId,
+            formName: "Register",
+            formData,
+        }).set("Cookie", cookie!);
+
+        fId = res.body.data.updatedFormName.id;
+        fName = res.body.data.updatedFormName.name;
+
+        const publishRes = await request(app).get(`${BACKEND_URL}/form/publish/${formId}`).set("Cookie", cookie!);
+
+        expect(publishRes.status).toBe(200);
+        expect(publishRes.body.message).toBe("Published form fetched successfully");
+        expect(publishRes.body.data).toEqual(
+            expect.objectContaining({
+                id: fId,
+                name: fName,
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
+                formFields: [
+                    expect.objectContaining({
+                        id: expect.any(String),
+                        formId: fId,
+                        blockId: expect.any(Number),
+                        blockName: "short answer",
+                        blockIndex: 1,
+                        blockQuestion: "First Name",
+                        blockPlaceholder: "Enter your first name",
+                        createdAt: expect.any(String),
+                        updatedAt: expect.any(String)
+                    }),
+                    expect.objectContaining({
+                        id: expect.any(String),
+                        formId: fId,
+                        blockId: expect.any(Number),
+                        blockName: "checkboxes",
+                        blockIndex: 2,
+                        blockQuestion: "City",
+                        blockPlaceholder: null,
+                        blockOptions: ["Pune", "Mumbai"],
+                        createdAt: expect.any(String),
+                        updatedAt: expect.any(String)
+                    }),
+                    expect.objectContaining({
+                        id: expect.any(String),
+                        formId: fId,
+                        blockId: expect.any(Number),
+                        blockName: "dropdown",
+                        blockIndex: 3,
+                        blockQuestion: "Technology",
+                        blockPlaceholder: null,
+                        blockOptions: ["React", "Angular"],
+                        createdAt: expect.any(String),
+                        updatedAt: expect.any(String)
+                    })
+                ]
+            })
+        )
+    })
+});

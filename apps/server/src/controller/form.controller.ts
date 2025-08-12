@@ -120,11 +120,33 @@ const saveForm: RequestHandler = asyncHandler ( async (req, res) => {
     ))
 });
 
+const getPublishForm: RequestHandler = asyncHandler ( async (req, res) => {
+
+    const { formId } = req.params;
+    
+    if(!formId){
+        throw apiError("Form Id params not found", 404);
+    }
+
+    const form = await formService.getPublishedForm(formId);
+    if(!form){
+        throw apiError("Published form not found", 404)
+    };
+
+    return res.status(200).json(new apiResponse(
+        true,
+        200,
+        "Published form fetched successfully",
+        form
+    ));
+})
+
 export { 
     createForm, 
     getAllForms, 
     getForm, 
     updateForm,
     deleteForm,
-    saveForm 
+    saveForm,
+    getPublishForm 
 };

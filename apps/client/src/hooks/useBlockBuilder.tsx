@@ -1,8 +1,5 @@
 import React from 'react';
 import { useAppSelector } from '@/store/hooks';
-import { Input } from '@/components/ui/input';
-import { ArrowRight, GripVertical, Plus, Trash2 } from 'lucide-react';
-import BlockTool from '@/features/forms/components/BlockTool';
 import InputComponent from '@/features/forms/components/ui/Input';
 import TextAreaComponent from '@/features/forms/components/ui/TextArea';
 import CheckBox from '@/features/forms/components/ui/CheckBox';
@@ -14,7 +11,6 @@ import Link from '@/features/forms/components/ui/Link';
 import Upload from '@/features/forms/components/ui/Upload';
 import Date from '@/features/forms/components/ui/Date';
 import Time from '@/features/forms/components/ui/Time';
-import { Button } from '@/components/ui/button';
 
 const useBlockBuilder = () => {
 

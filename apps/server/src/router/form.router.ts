@@ -4,6 +4,7 @@ import {
     deleteForm, 
     getAllForms, 
     getForm, 
+    getPublishForm, 
     saveForm, 
     updateForm 
 } from "../controller/form.controller";
@@ -18,5 +19,6 @@ router.route("/get-all/:workspaceId").get(verifyJwt, getAllForms);
 router.route("/get/:formId").get(verifyJwt, getForm);
 router.route("/:formId").patch(verifyJwt, updateForm).delete(verifyJwt, deleteForm);
 router.route("/save").post(verifyJwt, validate(formSaveDataValidation), saveForm)
+router.route("/publish/:formId").get(verifyJwt, getPublishForm);
 
 export default router;

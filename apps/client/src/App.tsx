@@ -13,6 +13,7 @@ import Sidebar from './components/sidebar/Sidebar';
 import { getAllWorkspaces } from './features/workspaces/service';
 import { setWorkspaces } from './store/features/workspace/workspaceSlice';
 import Form from './pages/Form';
+import SubmissionForm from './pages/FormSubmission';
 
 function App() {
   
@@ -52,6 +53,9 @@ function App() {
             </Route>
             <Route element={<ProtectRoute/>}>
               <Route path='/form/:workspaceId/:formId/edit' element={<Form/>}/>
+            </Route>
+            <Route element={<ProtectRoute/>}>
+              <Route path='/form/publish/:formId' element={<SubmissionForm/>}/>
             </Route>
             <Route path='*' element={<h3>Route Not Found</h3>}/>
         </Routes>

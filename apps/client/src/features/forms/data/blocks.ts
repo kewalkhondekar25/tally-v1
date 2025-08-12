@@ -79,11 +79,11 @@ export const blocks = [
         name: "date",
         icon: Calendar
     },
-    {
-        id: 14,
-        name: "time",
-        icon: Clock
-    },
+    // {
+    //     id: 14,
+    //     name: "time",
+    //     icon: Clock
+    // },
     // {
     //     id: 15,
     //     name: "ratings",
