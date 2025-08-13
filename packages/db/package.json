@@ -7,7 +7,8 @@
     "./client": "./src/index.ts"
   },
   "scripts": {
-    "db:migrate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev",
+    "db:generate": "npx prisma generate",
     "db:studio": "npx prisma studio"
   },
   "devDependencies": {

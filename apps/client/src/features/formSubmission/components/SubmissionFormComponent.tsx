@@ -350,7 +350,7 @@ const SubmissionFormComponent = () => {
                         })
                     }
                 </div>
-                <Button className='my-5'>Submit</Button>
+                <Button className='my-10 w-full'>Submit</Button>
             </form>
         </section>
     )

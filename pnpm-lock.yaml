@@ -204,6 +204,9 @@ importers:
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
+      nanoid:
+        specifier: '3'
+        version: 3.3.11
       supertest:
         specifier: ^7.1.4
         version: 7.1.4

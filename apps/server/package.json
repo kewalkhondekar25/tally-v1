@@ -25,6 +25,7 @@
     "express": "^5.1.0",
     "jest": "^30.0.5",
     "jsonwebtoken": "^9.0.2",
+    "nanoid": "3",
     "supertest": "^7.1.4",
     "zod": "^4.0.10"
   },

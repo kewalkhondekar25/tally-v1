@@ -6,4 +6,7 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js'],
   testMatch: ['**/__tests__/**/*.test.ts', '**/src/**/*.test.ts'],
+   transformIgnorePatterns: [
+    "/node_modules/(?!nanoid)/"
+  ],
 };

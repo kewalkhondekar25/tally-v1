@@ -54,22 +54,31 @@ const FormComponent = () => {
             dispatch(closeBlockPicker());
         }
     };
-    
+
     const handleSaveForm = async () => {
-        
+
         //check if all fields have questions?
         const noQuestion = blocks.filter(item => !item.question);
-        if(noQuestion.length >= 1){
+        if (noQuestion.length >= 1) {
             toast.error("Questions are Required!");
             return;
         };
 
-        const noOptions = blocks.filter(item => !item.options);
-        if(noOptions.length >= 1){
-            toast.error("Options are Required!");
-            return;
-        };
-        
+        blocks.map(item => {
+            if (item.name === "checkboxes") {
+                if (!item.options) {
+                    toast.error("Options are Required!");
+                    return;
+                }
+            };
+            if (item.name === "dropdown") {
+                if (!item.options) {
+                    toast.error("Options are Required!");
+                    return;
+                }
+            }
+        });
+
         if (!formId) {
             console.error("Form Id not provided");
             toast.error("Form Id not provided");
@@ -90,7 +99,7 @@ const FormComponent = () => {
 
         try {
             const savedForm = await saveForm(payload);
-            if(savedForm.statusCode === 201){
+            if (savedForm.statusCode === 201) {
                 toast.success(savedForm.message);
             };
         } catch (error) {

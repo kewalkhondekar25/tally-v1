@@ -14,6 +14,11 @@ import { getAllWorkspaces } from './features/workspaces/service';
 import { setWorkspaces } from './store/features/workspace/workspaceSlice';
 import Form from './pages/Form';
 import SubmissionForm from './pages/FormSubmission';
+import { FormDetail } from './pages/FormDetails';
+import FormSummary from './features/forms/components/FormSummary';
+import FormSubmission from './features/forms/components/FormSubmission';
+import FormShare from './features/forms/components/FormShare';
+import FormIntegration from './features/forms/components/FormIntegration';
 
 function App() {
   
@@ -53,6 +58,14 @@ function App() {
             </Route>
             <Route element={<ProtectRoute/>}>
               <Route path='/form/:workspaceId/:formId/edit' element={<Form/>}/>
+            </Route>
+            <Route element={<ProtectRoute/>}>
+              <Route path='/form/:formId' element={<FormDetail/>}>
+                <Route path='summary' element={<FormSummary/>}/>
+                <Route path='submissions' element={<FormSubmission/>}/>
+                <Route path='share' element={<FormShare/>}/>
+                <Route path='integrations' element={<FormIntegration/>}/>
+              </Route>
             </Route>
             <Route element={<ProtectRoute/>}>
               <Route path='/form/publish/:formId' element={<SubmissionForm/>}/>

@@ -19,14 +19,14 @@ const deleteDB = async () => {
 
 let cookie: string | undefined;
 
-beforeAll( async() => {
+beforeAll(async () => {
     await deleteDB();
     await request(app).post(`${BACKEND_URL}/auth/register`).send(testUser);
     const res = await request(app).post(`${BACKEND_URL}/auth/login`).send(testUser);
     cookie = res.headers["set-cookie"];
 });
 
-afterAll( async () => {
+afterAll(async () => {
     await deleteDB();
     prisma.$disconnect();
 });
@@ -38,7 +38,7 @@ describe("Create a workspace and form", () => {
     let formId: string;
 
     it("Should create a workspace", async () => {
-        
+
         const user = await prisma.user.findFirst();
         userId = user?.id!;
 
@@ -58,25 +58,28 @@ describe("Create a workspace and form", () => {
     });
 
     it("Should create a form in workspace", async () => {
-  
-        const res = await request(app).post(`${BACKEND_URL}/form/create`).send({workspaceId}).set("Cookie", cookie!);
+
+        const res = await request(app).post(`${BACKEND_URL}/form/create`).send({ workspaceId }).set("Cookie", cookie!);
         formId = res.body.data.id;
 
         expect(res.status).toBe(201);
         expect(res.body.message).toBe("Form created successfully");
-        expect(res.body.data).toEqual({
-            id: formId,
-            name: "Untitled",
-            workspaceId,
-            createdAt: expect.any(String),
-            updatedAt: expect.any(String),
-        })
+        expect(res.body.data).toEqual(
+            expect.objectContaining({
+                id: formId,
+                name: "Untitled",
+                workspaceId,
+                slug: expect.stringMatching(/^[A-Za-z]{7}$/),
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
+            })
+        )
     });
 
     it("Should fetch all form from a workspace", async () => {
-        
+
         const res = await request(app).get(`${BACKEND_URL}/form/get-all/${workspaceId}`).set("Cookie", cookie!);
-        
+
         expect(res.status).toBe(200);
         expect(res.body.message).toBe("Forms fetched successfully");
         expect(res.body.data).toEqual(
@@ -85,6 +88,7 @@ describe("Create a workspace and form", () => {
                     id: formId,
                     name: "Untitled",
                     workspaceId,
+                    slug: expect.stringMatching(/^[A-Za-z]{7}$/),
                     createdAt: expect.any(String),
                     updatedAt: expect.any(String),
                 })]
@@ -93,32 +97,34 @@ describe("Create a workspace and form", () => {
     });
 
     it("Should fetch a single form", async () => {
-        
+
         const res = await request(app).get(`${BACKEND_URL}/form/get/${formId}`).set("Cookie", cookie!);
-        
+
         expect(res.status).toBe(200);
         expect(res.body.message).toBe("Form fetched successfully");
         expect(res.body.data).toEqual({
             id: formId,
             name: "Untitled",
             workspaceId,
+            slug: expect.stringMatching(/^[A-Za-z]{7}$/),
             createdAt: expect.any(String),
             updatedAt: expect.any(String)
         });
     });
 
     it("Should update a form details", async () => {
-        
+
         const res = await request(app).patch(`${BACKEND_URL}/form/${formId}`).send({
             newName: "Registration form"
         }).set("Cookie", cookie!);
-        
+
         expect(res.status).toBe(200);
         expect(res.body.message).toBe("Form updated successfully");
         expect(res.body.data).toEqual({
             id: formId,
             name: "Registration form",
             workspaceId,
+            slug: expect.stringMatching(/^[A-Za-z]{7}$/),
             createdAt: expect.any(String),
             updatedAt: expect.any(String)
         });

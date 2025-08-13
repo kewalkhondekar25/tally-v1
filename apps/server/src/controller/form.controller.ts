@@ -3,12 +3,14 @@ import * as formService from "../service/form.service";
 import { apiError } from "../utils/errorHandler";
 import apiResponse from "../utils/responseHandler";
 import { RequestHandler } from "express";
+import { generateSlug } from "../utils/slug";
 
 const createForm: RequestHandler = asyncHandler( async (req, res) => {
 
     const { workspaceId } = req.body;
+    const slug: string = generateSlug();
 
-    const newForm = await formService.create(workspaceId); 
+    const newForm = await formService.create(workspaceId, slug); 
     if(!newForm){
         throw apiError("Failed to create new form", 400)
     };

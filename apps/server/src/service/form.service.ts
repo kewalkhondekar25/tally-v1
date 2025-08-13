@@ -3,12 +3,13 @@ import { Prisma } from "@repo/db/client"
 import { serviceHandler } from "../utils/serviceHandler";
 import { FormSaveDataType } from "@repo/common/types";
 
-const create = async (workspaceId: string) => {
+const create = async (workspaceId: string, slug: string) => {
     return await serviceHandler(async () => {
         const newForm = await prisma.file.create({
             data: {
                 name: "Untitled",
-                workspaceId
+                workspaceId, 
+                slug
             }
         });
         return newForm;

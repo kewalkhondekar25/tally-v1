@@ -1,2 +1,3 @@
 import FormComponent from "./components/FormComponent";
-export { FormComponent };
+import FormDetails from "./components/FormDetails";
+export { FormComponent, FormDetails };
