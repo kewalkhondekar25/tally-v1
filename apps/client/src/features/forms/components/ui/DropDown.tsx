@@ -38,7 +38,7 @@ const DropDown = ({ i }: { i: number }) => {
             <BlockTool i={i} />
             <div>
                 <Question index={currentBlockIndex!} />
-                <div className='flex flex-col items-center'>
+                <div className='w-64'>
                     {
                         Array.from({ length: addOptions }).map((_, i) => {
                             return (
@@ -48,7 +48,7 @@ const DropDown = ({ i }: { i: number }) => {
                                         onBlur={() => handleBlur(i)}
                                         onChange={(e) => setOption(e.target.value)}
                                         placeholder={`Option ${i + 1}`}
-                                        className='p-2 ring-0 text-sm font-semibold text-gray-600 
+                                        className='p-2 ring-0 text-base font-semibold text-gray-600 
                                         focus-visible:ring-0 focus:ring-0 focus:outline-none shadow-none
                                         placeholder:text-gray-400'
                                     />
@@ -59,11 +59,12 @@ const DropDown = ({ i }: { i: number }) => {
                     }
                 </div>
                 <div
-                    onClick={() => setAddOptions(prev => prev + 1)}
                     className='flex items-center gap-3 mt-2 text-gray-300'>
                     {/* <Checkbox disabled /> */}
                     <Select>
-                        <SelectTrigger className="[&[data-placeholder]]:text-gray-400">
+                        <SelectTrigger 
+                            onClick={() => setAddOptions(prev => prev + 1)}
+                            className="[&[data-placeholder]]:text-gray-400">   
                             <SelectValue placeholder="Add Option" />
                         </SelectTrigger>
                     </Select>

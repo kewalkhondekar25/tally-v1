@@ -8,7 +8,7 @@ import Blocks from './Blocks';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@radix-ui/react-tooltip';
 import useReduxState from '@/hooks/useReduxState';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { saveForm } from '../service';
 import { toast } from 'sonner';
 
@@ -27,6 +27,7 @@ const FormComponent = () => {
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isToolOpen, setIsToolOpen] = useState(false);
     const [formName, setFormName] = useState("");
+    const navigate = useNavigate();
 
 
     const handleKeypress = (e: React.KeyboardEvent) => {
@@ -64,20 +65,22 @@ const FormComponent = () => {
             return;
         };
 
-        blocks.map(item => {
-            if (item.name === "checkboxes") {
-                if (!item.options) {
-                    toast.error("Options are Required!");
-                    return;
-                }
-            };
-            if (item.name === "dropdown") {
-                if (!item.options) {
-                    toast.error("Options are Required!");
-                    return;
-                }
-            }
-        });
+        //check if checkboxes & dropdowns have options?
+        const noCheckboxesOpt = blocks
+            .filter(item => item.name === "checkboxes")
+            .filter(item => !item.options);
+
+        if(noCheckboxesOpt.length >= 1){
+            return toast.error("Checkboxes Options are Required!");
+        }
+
+        const noDropdownOpt = blocks
+            .filter(item => item.name === "dropdown")
+            .filter(item => !item.options);
+
+        if(noDropdownOpt.length >= 1){
+            return toast.error("Dropdown Options are Required!");
+        }
 
         if (!formId) {
             console.error("Form Id not provided");
@@ -101,6 +104,7 @@ const FormComponent = () => {
             const savedForm = await saveForm(payload);
             if (savedForm.statusCode === 201) {
                 toast.success(savedForm.message);
+                navigate("/dashboard");
             };
         } catch (error) {
             console.log(error);
@@ -127,10 +131,10 @@ const FormComponent = () => {
             }
 
             <Input
-                className="border-none text-2xl font-bold text-gray-700 mt-20 mb-5 
+                className="border-none text-3xl font-bold text-gray-700 mt-20 mb-5 
                 ring-0 focus-visible:ring-0 focus:ring-0 focus:outline-none 
                 shadow-none
-                placeholder:text-2xl placeholder:font-bold"
+                placeholder:text-3xl placeholder:font-bold"
                 placeholder='Form title'
                 autoFocus
                 onChange={(e) => setFormName(e.target.value)}
@@ -165,7 +169,9 @@ const FormComponent = () => {
 
             {
                 isToolOpen && (
-                    <div className='relative flex justify-center items-center text-gray-400 mt-5 mb-10'>
+                    <div
+                        className='relative flex justify-center items-center text-gray-400 
+                        mt-5 mb-10'>
                         <Trash2 className='h-4' />
                         <Plus className='h-4' />
                         <GripVertical className='h-4' />
@@ -175,7 +181,7 @@ const FormComponent = () => {
                             placeholder={`Type '/ ' to insert blocks`}
                             ref={toolRef}
                             onChange={handleBlockChange}
-                            className="border-none text-gray-700 w-full
+                            className="border-none text-gray-700 w-52
                             ring-0 focus-visible:ring-0 focus:ring-0 focus:outline-none ml-1 
                             shadow-none" />
                         {isBlockerPickerOpen && <BlockPicker indexRef={indexRef} />}
@@ -184,18 +190,21 @@ const FormComponent = () => {
             }
             {
                 (isToolOpen && !isBlockerPickerOpen) && (
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button>Submit
-                                    <ArrowRight />
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p className='bg-[#171717] text-white p-1 text-sm mb-1 rounded'>Forms cannot be submitted from the form builder. Use a published form to submit a response.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <div className='w-64'>
+
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button className='mb-3'>Submit
+                                        <ArrowRight />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p className='bg-[#171717] text-white p-1 text-sm mb-1 rounded'>Forms cannot be submitted from the form builder. Use a published form to submit a response.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
                 )
             }
         </div>

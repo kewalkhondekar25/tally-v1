@@ -31,25 +31,25 @@ const CheckBox = ({ i }: { i: number }) => {
 
 
     return (
-        <div key={i} className='flex justify-center items-center mt-3'>
+        <div key={i} className='flex items-center mt-3'>
             <BlockTool i={i} />
-            <div>
+            <div className='flex flex-col'>
                 <Question index={currentBlockIndex!} />
-                <div className='flex flex-col items-center'>
+                <div className='ml-1'>
                     {
                         Array.from({ length: addCheckbox }).map((_, i) => {
                             return (
-                                <div className='flex items-center gap-3 -my-1' key={i}>
+                                <div className='flex items-center gap-3 -my-1 ' key={i}>
                                     <Checkbox disabled className='border-gray-400' />
                                     <Input
-                                        disabled={disabledInputs[i]}
                                         onBlur={() => handleBlur(i)}
                                         onChange={(e) => setOption(e.target.value)}
                                         placeholder={`Option ${i + 1}`}
-                                        className='p-0 border-none ring-0 
+                                        className='p-0 border-none ring-0 text-base
                                         focus-visible:ring-0 focus:ring-0 focus:outline-none shadow-none
-                                        placeholder:text-gray-400'
-                                    />
+                                        placeholder:text-gray-400  disabled:text-black'
+                                        disabled={disabledInputs[i]}
+                                        />
                                 </div>
                             )
                         })
@@ -57,8 +57,8 @@ const CheckBox = ({ i }: { i: number }) => {
                 </div>
                 <div
                     onClick={() => setAddCheckbox(prev => prev + 1)}
-                    className='flex items-center gap-3 mt-1 text-gray-300'>
-                    <Checkbox disabled />
+                    className='flex items-center gap-3 mt-1 ml-1 text-gray-300'>
+                    <Checkbox className='border-gray-300' disabled />
                     <div>Add more option</div>
                 </div>
             </div>

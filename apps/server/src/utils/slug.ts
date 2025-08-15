@@ -2,7 +2,7 @@ import { customAlphabet } from "nanoid";
 
 const generateSlug = () => {
     
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     const slug = customAlphabet(alphabet, 7);
     return slug();
 };

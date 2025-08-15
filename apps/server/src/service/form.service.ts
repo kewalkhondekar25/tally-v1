@@ -1,14 +1,14 @@
 import prisma from "@repo/db/client";
 import { Prisma } from "@repo/db/client"
 import { serviceHandler } from "../utils/serviceHandler";
-import { FormSaveDataType } from "@repo/common/types";
+import { FormSaveDataType, FormSubmitType } from "@repo/common/types";
 
 const create = async (workspaceId: string, slug: string) => {
     return await serviceHandler(async () => {
         const newForm = await prisma.file.create({
             data: {
                 name: "Untitled",
-                workspaceId, 
+                workspaceId,
                 slug
             }
         });
@@ -91,11 +91,11 @@ const save = async (payload: FormSaveDataType) => {
 
 const getPublishedForm = async (formId: string) => {
 
-    return await serviceHandler( async () => {
+    return await serviceHandler(async () => {
 
         const form = await prisma.file.findUnique({
             where: { id: formId },
-            include: { 
+            include: {
                 formFields: true,
             }
         });
@@ -104,12 +104,60 @@ const getPublishedForm = async (formId: string) => {
     });
 };
 
-export { 
-    create, 
-    getAll, 
-    get, 
-    update, 
-    trash, 
+const submit = async (slug: string, payload: FormSubmitType) => {
+
+    const formId = payload.response[0]?.formId;
+
+    return await serviceHandler(async () => {
+
+        return await prisma.$transaction(async (tx) => {
+
+            const response = await tx.responses.create({
+                data: { formId: formId! }
+            });
+
+            const responseId = response.id;
+
+            const data = payload.response.map(item => {
+                return {
+                    formFieldId: item.formFieldId,
+                    responsesId: responseId,
+                    answer: item.answer
+                }
+            });
+
+            const { count } = await tx.fieldResponses.createMany({
+                data
+            });
+
+            return count;
+        })
+    })
+};
+
+const getFormResponse = async (formId: string) => {
+
+    return await serviceHandler( async () => {
+
+        const responses = await prisma.file.findUnique({
+            where: { id: formId },
+            include: { 
+                formFields: { include: { fieldResponses: true }}
+            }
+        });
+        
+        return responses;
+    });
+};
+
+export {
+    create,
+    getAll,
+    get,
+    update,
+    trash,
     save,
-    getPublishedForm
+    getPublishedForm,
+    submit,
+    getFormResponse
 };

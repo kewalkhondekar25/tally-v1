@@ -4,13 +4,12 @@ import prisma from "@repo/db/client";
 import request from "supertest";
 import app from "../app";
 import { testUser } from "../utils/test";
-import { string } from "zod";
 
 const BACKEND_URL = "/api/v1";
 
 const deleteDb = async () => {
-    await prisma.responses.deleteMany();
     await prisma.fieldResponses.deleteMany();
+    await prisma.responses.deleteMany();
     await prisma.formFields.deleteMany();
     await prisma.file.deleteMany();
     await prisma.workspace.deleteMany();
@@ -59,8 +58,8 @@ describe("Add blocks into form & publish", () => {
     });
 
     afterEach(async () => {
-        await prisma.responses.deleteMany();
         await prisma.fieldResponses.deleteMany();
+        await prisma.responses.deleteMany();
         await prisma.formFields.deleteMany();
         await prisma.file.deleteMany();
         await prisma.workspace.deleteMany();

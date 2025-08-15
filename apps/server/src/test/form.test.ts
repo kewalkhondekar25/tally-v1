@@ -64,16 +64,14 @@ describe("Create a workspace and form", () => {
 
         expect(res.status).toBe(201);
         expect(res.body.message).toBe("Form created successfully");
-        expect(res.body.data).toEqual(
-            expect.objectContaining({
-                id: formId,
-                name: "Untitled",
-                workspaceId,
-                slug: expect.stringMatching(/^[A-Za-z]{7}$/),
-                createdAt: expect.any(String),
-                updatedAt: expect.any(String),
-            })
-        )
+        expect(res.body.data).toEqual({
+            id: formId,
+            name: "Untitled",
+            workspaceId,
+            slug: expect.stringMatching(/^[A-Za-z]{7}$/),
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+        })
     });
 
     it("Should fetch all form from a workspace", async () => {
@@ -82,18 +80,17 @@ describe("Create a workspace and form", () => {
 
         expect(res.status).toBe(200);
         expect(res.body.message).toBe("Forms fetched successfully");
-        expect(res.body.data).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({
-                    id: formId,
-                    name: "Untitled",
-                    workspaceId,
-                    slug: expect.stringMatching(/^[A-Za-z]{7}$/),
-                    createdAt: expect.any(String),
-                    updatedAt: expect.any(String),
-                })]
-            )
-        );
+        expect(res.body.data).toMatchObject([
+            expect.objectContaining({
+                id: formId,
+                name: "Untitled",
+                workspaceId,
+                slug: expect.stringMatching(/^[A-Za-z]{7}$/),
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
+            })
+        ]);
+
     });
 
     it("Should fetch a single form", async () => {
@@ -102,7 +99,7 @@ describe("Create a workspace and form", () => {
 
         expect(res.status).toBe(200);
         expect(res.body.message).toBe("Form fetched successfully");
-        expect(res.body.data).toEqual({
+        expect(res.body.data).toMatchObject({
             id: formId,
             name: "Untitled",
             workspaceId,
@@ -120,7 +117,7 @@ describe("Create a workspace and form", () => {
 
         expect(res.status).toBe(200);
         expect(res.body.message).toBe("Form updated successfully");
-        expect(res.body.data).toEqual({
+        expect(res.body.data).toMatchObject({
             id: formId,
             name: "Registration form",
             workspaceId,

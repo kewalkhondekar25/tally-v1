@@ -27,8 +27,23 @@ const formSaveDataValidation = z.object({
     ) 
 });
 
+const formSubmitValidation = z.object({
+    response: z.array(
+        z.object({
+            answer: z.union([
+                z.string(),
+                z.number(),
+                z.array(z.string())
+            ]),
+            formFieldId: z.string().nonempty("Form field Id is required"),
+            formId: z.string().nonempty("Form Id is required"),
+        })
+    )
+});
+
 export {
     registerUserSchema,
     loginUserSchema,
-    formSaveDataValidation
+    formSaveDataValidation,
+    formSubmitValidation
 }

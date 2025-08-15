@@ -59,14 +59,14 @@ model FormFields {
   blockOptions     Json?
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
-  fieldResponses   FieldResponses?
+  fieldResponses   FieldResponses[]
 }
 
 model FieldResponses {
   id          String     @id @default(uuid())
-  formFieldId String     @unique
+  formFieldId String
   formField   FormFields @relation(fields: [formFieldId], references: [id])
-  responsesId String     @unique
+  responsesId String
   responses   Responses  @relation(fields: [responsesId], references: [id])
   answer      Json
   createdAt   DateTime   @default(now())
@@ -77,5 +77,5 @@ model Responses {
   id             String          @id @default(uuid())
   formId         String
   files          File            @relation(fields: [formId], references: [id])
-  fieldResponses FieldResponses?
+  fieldResponses FieldResponses[]
 }

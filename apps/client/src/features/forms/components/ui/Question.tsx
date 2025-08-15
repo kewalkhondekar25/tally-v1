@@ -18,11 +18,11 @@ const Question = ({ index }: { index: number }) => {
         <Input
             onBlur={handleBlur}
             onChange={(e) => setBlockValues(prev => ({ ...prev, question: e.target.value}))}
-            placeholder='Type a Question'
-            className="border-none text-gray-700 w-full
+            placeholder='Type a question'
+            className="border-none text-gray-700 w-64
             ring-0 focus-visible:ring-0 focus:ring-0 focus:outline-none ml-1 
-            shadow-none px-0 text-base font-semibold
-            placeholder:text-base placeholder:font-semibold placeholder:text-gray-400"
+            shadow-none px-0 text-lg font-semibold
+            placeholder:text-lg placeholder:font-semibold placeholder:text-gray-350"
         />
     );
 };

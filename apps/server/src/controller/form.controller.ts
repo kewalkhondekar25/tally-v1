@@ -141,7 +141,48 @@ const getPublishForm: RequestHandler = asyncHandler ( async (req, res) => {
         "Published form fetched successfully",
         form
     ));
-})
+});
+
+const submitForm: RequestHandler = asyncHandler ( async (req, res) => {
+
+    const payload = req.body;
+    const { slug } = req.params;
+
+    if(!slug){
+        throw apiError("Slug not found is params", 404);
+    };
+
+    const count = await formService.submit(slug, payload);
+    if(!count || count < 1 ){
+        throw apiError("Failed to submit form", 500);
+    }
+
+    return res.status(201).json(new apiResponse(
+        true,
+        201,
+        "Form submitted successfully"
+    ));
+});
+
+const getFormResponse: RequestHandler = asyncHandler ( async (req, res) => {
+
+    const { formId } = req.params;
+    if(!formId){
+        throw apiError("No form Id found in params", 404);
+    };
+
+    const formResponse = await formService.getFormResponse(formId);
+    if(!formResponse){
+        throw apiError("Failed to fetched form responses", 500)
+    };
+    
+    return res.status(200).json(new apiResponse(
+        true,
+        200,
+        "Form responses fetched successfully",
+        formResponse
+    ));
+});
 
 export { 
     createForm, 
@@ -150,5 +191,7 @@ export {
     updateForm,
     deleteForm,
     saveForm,
-    getPublishForm 
+    getPublishForm,
+    submitForm,
+    getFormResponse 
 };

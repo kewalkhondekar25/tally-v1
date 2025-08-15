@@ -20,7 +20,7 @@ const InputComponent = ({ i }: { i: number }) => {
     };
 
     return (
-        <div key={i} className='flex justify-center items-center mt-3'>
+        <div key={i} className='flex justify-center items-center mt-3 gap-2'>
             <BlockTool i={i} />
             <div>
                 <Question index={currentBlockIndex!} />
