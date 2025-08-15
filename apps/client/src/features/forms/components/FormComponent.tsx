@@ -3,7 +3,7 @@ import { ArrowRight, File, GripVertical, LayoutTemplate, Plus, Trash2 } from 'lu
 import React, { useEffect, useRef, useState } from 'react';
 import BlockPicker from './BlockPicker';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { closeBlockPicker, openBlockPicker } from '@/store/features/blockpicker/blockerPickerSlice';
+import { closeBlockPicker, deleteBlocks, openBlockPicker } from '@/store/features/blockpicker/blockerPickerSlice';
 import Blocks from './Blocks';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@radix-ui/react-tooltip';
@@ -104,7 +104,8 @@ const FormComponent = () => {
             const savedForm = await saveForm(payload);
             if (savedForm.statusCode === 201) {
                 toast.success(savedForm.message);
-                navigate("/dashboard");
+                dispatch(deleteBlocks());
+                navigate(`/form/${formId}/submissions`);
             };
         } catch (error) {
             console.log(error);

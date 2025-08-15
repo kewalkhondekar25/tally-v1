@@ -184,6 +184,26 @@ const getFormResponse: RequestHandler = asyncHandler ( async (req, res) => {
     ));
 });
 
+const getPublishSlugForm: RequestHandler = asyncHandler ( async (req, res) => {
+
+    const { slug } = req.params;
+    if(!slug){
+        throw apiError("Slug missing in params", 404);
+    };
+
+    const formId = await formService.getFormIdBySlug(slug);
+    if(!formId){
+        throw apiError("No form found for provided slug", 404);
+    }
+
+    return res.status(200).json(new apiResponse(
+        true,
+        200,
+        "Form Id fetched successfully",
+        formId
+    ));
+});
+
 export { 
     createForm, 
     getAllForms, 
@@ -193,5 +213,6 @@ export {
     saveForm,
     getPublishForm,
     submitForm,
-    getFormResponse 
+    getFormResponse,
+    getPublishSlugForm 
 };

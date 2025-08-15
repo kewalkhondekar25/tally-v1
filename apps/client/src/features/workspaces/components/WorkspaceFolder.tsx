@@ -71,7 +71,7 @@ const WorkspaceFolder = () => {
     };
 
     if (workspaces.length < 1) {
-        return <p className="text-xs">Create Workspaces</p>
+        return <p className="text-xs text-gray-300 mt-2">Create New Workspace</p>
     }
 
     return (
@@ -150,30 +150,6 @@ const WorkspaceFolder = () => {
                     )
                 })
             }
-
-            {/* {
-                arr1.map((item, i) => {
-                    return (
-                        <Accordion key={i} type="single" collapsible className='-my-3'>
-                            <AccordionItem value="item-1">
-                                <div className='flex items-center gap-2'>
-                                    <AccordionTrigger className='flex-none cursor-pointer'></AccordionTrigger>
-                                    <span className='text-sm text-gray-800 font-semibold'>My Workspace</span>
-                                </div>
-                                {
-                                    arr.map((item, i) => {
-                                        return (
-                                            <AccordionContent className='ml-6 pb-2' key={i}>
-                                                Form {i + 1}
-                                            </AccordionContent>
-                                        )
-                                    })
-                                }
-                            </AccordionItem>
-                        </Accordion>
-                    )
-                })
-            } */}
         </div>
     )
 }

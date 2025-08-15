@@ -49,6 +49,7 @@ describe("Add blocks into form & publish", () => {
         blockQuestion: "First Name",
         blockPlaceholder: "Enter your first name"
     }];
+    let slug: string;
 
     beforeEach(async () => {
         const workspaceRes = await request(app).post(`${BACKEND_URL}/workspace/create`).set("Cookie", cookie!);
@@ -80,6 +81,7 @@ describe("Add blocks into form & publish", () => {
                 id: formId,
                 workspaceId,
                 name: "Register",
+                slug: expect.any(String),
                 createdAt: expect.any(String),
                 updatedAt: expect.any(String)
             }),
@@ -198,6 +200,78 @@ describe("Add blocks into form & publish", () => {
         fName = res.body.data.updatedFormName.name;
 
         const publishRes = await request(app).get(`${BACKEND_URL}/form/publish/${formId}`).set("Cookie", cookie!);
+
+        expect(publishRes.status).toBe(200);
+        expect(publishRes.body.message).toBe("Published form fetched successfully");
+        expect(publishRes.body.data).toEqual(
+            expect.objectContaining({
+                id: fId,
+                name: fName,
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
+                formFields: [
+                    expect.objectContaining({
+                        id: expect.any(String),
+                        formId: fId,
+                        blockId: expect.any(Number),
+                        blockName: "short answer",
+                        blockIndex: 1,
+                        blockQuestion: "First Name",
+                        blockPlaceholder: "Enter your first name",
+                        createdAt: expect.any(String),
+                        updatedAt: expect.any(String)
+                    }),
+                    expect.objectContaining({
+                        id: expect.any(String),
+                        formId: fId,
+                        blockId: expect.any(Number),
+                        blockName: "checkboxes",
+                        blockIndex: 2,
+                        blockQuestion: "City",
+                        blockPlaceholder: null,
+                        blockOptions: ["Pune", "Mumbai"],
+                        createdAt: expect.any(String),
+                        updatedAt: expect.any(String)
+                    }),
+                    expect.objectContaining({
+                        id: expect.any(String),
+                        formId: fId,
+                        blockId: expect.any(Number),
+                        blockName: "dropdown",
+                        blockIndex: 3,
+                        blockQuestion: "Technology",
+                        blockPlaceholder: null,
+                        blockOptions: ["React", "Angular"],
+                        createdAt: expect.any(String),
+                        updatedAt: expect.any(String)
+                    })
+                ]
+            })
+        )
+    });
+
+    it("Should fetch published form using slug", async () => {
+
+        let fId: string;
+        let fName: string;
+
+        const res = await request(app).post(`${BACKEND_URL}/form/save`).send({
+            formId,
+            formName: "Register",
+            formData,
+        }).set("Cookie", cookie!);
+
+        fId = res.body.data.updatedFormName.id;
+        fName = res.body.data.updatedFormName.name;
+        slug = res.body.data.updatedFormName.slug;
+
+        const fetchedFormId = await request(app).get(`${BACKEND_URL}/form/get-published-form/${slug}`)
+        .set("Cookie", cookie!);
+        
+        const fetchedFormIdBySlug = fetchedFormId.body.data.id;
+
+        const publishRes = await request(app).get(`${BACKEND_URL}/form/publish/${fetchedFormIdBySlug}`)
+        .set("Cookie", cookie!);
 
         expect(publishRes.status).toBe(200);
         expect(publishRes.body.message).toBe("Published form fetched successfully");

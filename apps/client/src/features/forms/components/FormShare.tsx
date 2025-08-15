@@ -1,9 +1,46 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Copy } from 'lucide-react'
-import React from 'react'
+import { Copy, CopyCheck } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { getFormDetails } from '../service'
+import { useParams } from 'react-router-dom'
+import { toast } from 'sonner'
+import type { File } from '@/types'
 
 const FormShare = () => {
+
+    const { formId } = useParams();
+    const [form, setForm] = useState<File>();
+    const [copied, setCopied] = useState(false);
+
+    const domain = import.meta.env.ENV_PROD ? import.meta.env.VITE_PROD_DOMAIN! : import.meta.env.VITE_DEV_DOMAIN  
+    const link = `${domain}/form/${form?.slug}`;
+
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(link);
+            setCopied(true);
+            toast.success("Form link copied to clipboard");
+            setTimeout(() => setCopied(false), 2000);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchForm = async (formId: string) => {
+            try {
+                const formData = await getFormDetails(formId);
+                if(formData.statusCode === 200){
+                    setForm(formData.data)
+                }
+            } catch (error: any) {
+                toast.error(error.response.data.message)
+            }
+        };
+        fetchForm(formId!)
+    }, []);
+
     return (
         <section className='flex flex-col items-center mx-3'>
             <div className='my-5'>
@@ -13,9 +50,9 @@ const FormShare = () => {
                 </p>
             </div>
             <div className='flex w-full gap-2'>
-                <Input/>
-                <Button>
-                    <Copy/> Copy
+                <Input value={link ?? ""} readOnly/>
+                <Button onClick={handleCopy}>
+                     {copied ? <CopyCheck/> : <Copy/>}
                 </Button>
             </div>
             <div className='my-5'>

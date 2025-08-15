@@ -33,6 +33,9 @@ const blockpickerSlice = createSlice({
         deleteBlockPicked: (state, action:PayloadAction<{ i: number}>) => {
             state.blockName = state.blockName.filter((item, i) => i !== action.payload.i)
         },
+        deleteBlocks: (state) => {
+            state.blockName = [];
+        },
         setPlaceholder: (state, action: PayloadAction<{ index: number, placeholder: string}>) => {
             const block = state.blockName.find(item => item.index === action.payload.index);
             if(block){
@@ -62,6 +65,7 @@ export const {
     closeBlockPicker, 
     setBlockPickedName,
     deleteBlockPicked,
+    deleteBlocks,
     setPlaceholder,
     setQuestion,
     setOptions

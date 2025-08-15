@@ -150,6 +150,18 @@ const getFormResponse = async (formId: string) => {
     });
 };
 
+const getFormIdBySlug = async (slug: string) => {
+
+    return await serviceHandler( async () => {
+
+        const formId = await prisma.file.findUnique({
+            where: { slug },
+            select: { id: true }
+        });
+        return formId;
+    });
+};
+
 export {
     create,
     getAll,
@@ -159,5 +171,6 @@ export {
     save,
     getPublishedForm,
     submit,
-    getFormResponse
+    getFormResponse,
+    getFormIdBySlug
 };

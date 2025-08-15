@@ -6,6 +6,7 @@ import {
     getForm, 
     getFormResponse, 
     getPublishForm, 
+    getPublishSlugForm, 
     saveForm, 
     submitForm, 
     updateForm 
@@ -24,5 +25,6 @@ router.route("/save").post(verifyJwt, validate(formSaveDataValidation), saveForm
 router.route("/publish/:formId").get(verifyJwt, getPublishForm);
 router.route("/:slug").post(validate(formSubmitValidation), submitForm);//public
 router.route("/response/:formId").get(verifyJwt, getFormResponse);
+router.route("/get-published-form/:slug").get(verifyJwt, getPublishSlugForm);
 
 export default router;

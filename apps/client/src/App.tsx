@@ -70,6 +70,7 @@ function App() {
             <Route element={<ProtectRoute/>}>
               <Route path='/form/publish/:formId' element={<SubmissionForm/>}/>
             </Route>
+            <Route path='/form/:slug' element={<SubmissionForm/>}/>
             <Route path='*' element={<h3>Route Not Found</h3>}/>
         </Routes>
         </div>

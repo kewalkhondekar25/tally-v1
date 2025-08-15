@@ -44,8 +44,52 @@ const getForm = async (formId: string) => {
     }
 };
 
+const getFormResponses = async (formId: string) => {
+    try {
+        const response = await useAxios({
+            method: "GET",
+            url: `/form/response/${formId}`,
+        });
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const getFormDetails = async (formId: string) => {
+    try {
+        const response = await useAxios({
+            method: "GET",
+            url: `/form/get/${formId}`,
+        });
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const getFormIdBySlug = async (slug: string) => {
+    try {
+        const res = await useAxios({
+            method: "GET",
+            url: `/form/get-published-form/${slug}`
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 export { 
     createForm,
     saveForm,
-    getForm 
+    getForm,
+    getFormResponses,
+    getFormDetails,
+    getFormIdBySlug 
 };

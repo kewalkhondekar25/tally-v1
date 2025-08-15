@@ -22,6 +22,7 @@ import {
     SelectContent,
     SelectItem,
 } from "@/components/ui/select";
+import { getFormIdBySlug } from '@/features/forms/service';
 
 
 interface BlockType {
@@ -46,8 +47,21 @@ interface BlockType {
 
 
 const SubmissionFormComponent = () => {
+    console.log("loaded");
+    
 
-    const { formId } = useParams();
+    let formId: string;
+    let slug: string;
+
+    const params = useParams();
+    console.log("params", params);
+    
+    if(params.formId){
+        formId = params.formId;
+    }else if(params.slug){
+        slug = params.slug
+    }
+
     const [formBlocks, setFormBlocks] = useState<BlockType>();
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState<Date | undefined>(undefined)
@@ -88,6 +102,21 @@ const SubmissionFormComponent = () => {
 
 
     useEffect(() => {
+
+        if(slug){
+            const fetchFormId = async (slug: string) => {
+                try {
+                    const res = await getFormIdBySlug(slug);
+                    if(res.statusCode === 200){
+                        formId = res.data.id
+                    }
+                } catch (error: any) {
+                    console.log(error);
+                    toast.error(error?.response.data.message);
+                }
+            };
+            fetchFormId(slug);
+        };
 
         const fetchForm = async () => {
             try {
