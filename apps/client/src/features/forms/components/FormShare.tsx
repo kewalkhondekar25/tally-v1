@@ -14,7 +14,7 @@ const FormShare = () => {
     const [copied, setCopied] = useState(false);
 
     const domain = import.meta.env.ENV_PROD ? import.meta.env.VITE_PROD_DOMAIN! : import.meta.env.VITE_DEV_DOMAIN  
-    const link = `${domain}/form/${form?.slug}`;
+    const link = `${domain}/form/submit/${form?.slug}`;
 
     const handleCopy = async () => {
         try {
@@ -51,7 +51,7 @@ const FormShare = () => {
             </div>
             <div className='flex w-full gap-2'>
                 <Input value={link ?? ""} readOnly/>
-                <Button onClick={handleCopy}>
+                <Button className='bg-[#0070d7]' onClick={handleCopy}>
                      {copied ? <CopyCheck/> : <Copy/>}
                 </Button>
             </div>

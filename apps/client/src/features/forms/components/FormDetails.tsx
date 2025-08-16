@@ -34,7 +34,9 @@ const FormDetails = () => {
                 className='flex justify-between items-center 
                 mt-10 w-72'>
                 <h3 className='text-3xl font-bold text-gray-700 my-5'>{form?.name}</h3>
-                <LinkIcon className='h-5' />
+                <Link to={`share`}>
+                    <LinkIcon className='h-5' />
+                </Link>
             </div>
             <div
                 className='flex gap-2 

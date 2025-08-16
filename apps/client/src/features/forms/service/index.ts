@@ -50,7 +50,7 @@ const getFormResponses = async (formId: string) => {
             method: "GET",
             url: `/form/response/${formId}`,
         });
-        console.log(response);
+        console.log("response", response);
         return response;
     } catch (error) {
         console.log(error);

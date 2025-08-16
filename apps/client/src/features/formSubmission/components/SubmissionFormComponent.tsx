@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
-import { get } from '../service';
+import { useNavigate, useParams } from 'react-router-dom';
+import { get, submit } from '../service';
 import { toast } from 'sonner';
 import LableComponent from './LableComponent';
 import { Input } from '@/components/ui/input';
@@ -47,22 +47,18 @@ interface BlockType {
 
 
 const SubmissionFormComponent = () => {
-    console.log("loaded");
-    
-
-    let formId: string;
-    let slug: string;
 
     const params = useParams();
-    console.log("params", params);
-    
-    if(params.formId){
-        formId = params.formId;
-    }else if(params.slug){
-        slug = params.slug
-    }
+    const slug = params.slug;
+    // const formId = params.formId
 
     const [formBlocks, setFormBlocks] = useState<BlockType>();
+    const [formId, setFormId] = useState<string>();
+    console.log("formId from state", formId);
+
+
+    const navigate = useNavigate();
+
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState<Date | undefined>(undefined)
 
@@ -89,45 +85,62 @@ const SubmissionFormComponent = () => {
 
     const handleSubmission: SubmitHandler<Record<string, string | number | Date | undefined | string[]>> = async (data) => {
         console.log(data);
-        const res = formBlocks?.formFields.map(item => {
+        const response = formBlocks?.formFields.map(item => {
             return {
-                formId: item.formId,
+                answer: data[item.blockQuestion] as string | number | string[],
                 formFieldId: item.id,
-                answer: data[item.blockQuestion]
+                formId: item.formId,
             }
-        });
-        console.log("final", res);
+        }) ?? [];
+        const payload = { response };
+        try {
+            const submission = await submit(payload, slug!);
+            if (submission.statusCode === 201) {
+                navigate(`thanks`)
+                toast(submission.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-    }
+    const fetchFormId = async (slug: string) => {
+        try {
+            const res = await getFormIdBySlug(slug);
+            if (res.statusCode === 200) {
+                console.log("res.data.id", res.data.id);
+                setFormId(res.data.id);
+                return res.data.id;
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const fetchForm = async (formId: string) => {
+        try {
+            const res = await get(formId);
+            setFormBlocks(res.data);
+        } catch (error: any) {
+            toast.error(error)
+        }
+    };
 
 
     useEffect(() => {
+        if (params.slug) {
+            fetchFormId(slug!);
+        } else if (params.formId) {
+            setFormId(params.formId);
+        }
+    }, [params.slug, params.formId]);
 
-        if(slug){
-            const fetchFormId = async (slug: string) => {
-                try {
-                    const res = await getFormIdBySlug(slug);
-                    if(res.statusCode === 200){
-                        formId = res.data.id
-                    }
-                } catch (error: any) {
-                    console.log(error);
-                    toast.error(error?.response.data.message);
-                }
-            };
-            fetchFormId(slug);
-        };
+    useEffect(() => {
+        if (formId) {
+            fetchForm(formId);
+        }
+    }, [formId]);
 
-        const fetchForm = async () => {
-            try {
-                const res = await get(formId!);
-                setFormBlocks(res.data);
-            } catch (error: any) {
-                toast.error(error)
-            }
-        };
-        fetchForm();
-    }, []);
 
     return (
         <section className='flex flex-col items-center'>

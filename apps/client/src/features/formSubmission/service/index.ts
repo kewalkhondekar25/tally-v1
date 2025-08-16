@@ -1,4 +1,5 @@
 import useAxios from "@/hooks/useAxios"
+import type { FormSubmitType } from "@repo/common/types";
 
 const get = async (formId: string) => {
     try {
@@ -14,6 +15,22 @@ const get = async (formId: string) => {
     }
 };
 
+const submit = async (payload: FormSubmitType, slug: string) => {
+    try {
+        const submission = await useAxios({
+            method: "POST",
+            url: `/form/${slug}`,
+            data: payload
+        });
+        console.log(submission);
+        return submission;
+    } catch (error) {
+        console.log(error);
+        throw error
+    }
+};
+
 export {
-    get
+    get,
+    submit
 };

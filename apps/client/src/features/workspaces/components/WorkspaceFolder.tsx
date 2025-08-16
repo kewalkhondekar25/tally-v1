@@ -136,7 +136,7 @@ const WorkspaceFolder = () => {
                                     {
                                         item.files.map((items, i) => {
                                             return (
-                                                <Link onClick={() => dispatch(closeSidebar())} to={`/form/${item.id}/${items.id}/edit`} key={i}>
+                                                <Link onClick={() => dispatch(closeSidebar())} to={`/form/${items.id}/submissions`} key={i}>
                                                     <AccordionContent className='ml-6 pb-2'>
                                                         {items.name}
                                                     </AccordionContent>

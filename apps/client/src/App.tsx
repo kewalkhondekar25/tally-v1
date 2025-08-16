@@ -19,6 +19,7 @@ import FormSummary from './features/forms/components/FormSummary';
 import FormSubmission from './features/forms/components/FormSubmission';
 import FormShare from './features/forms/components/FormShare';
 import FormIntegration from './features/forms/components/FormIntegration';
+import Thankyou from './pages/Thankyou';
 
 function App() {
   
@@ -70,7 +71,10 @@ function App() {
             <Route element={<ProtectRoute/>}>
               <Route path='/form/publish/:formId' element={<SubmissionForm/>}/>
             </Route>
-            <Route path='/form/:slug' element={<SubmissionForm/>}/>
+            <Route path='/form'>
+              <Route path='submit/:slug' element={<SubmissionForm/>}/>
+              <Route path='submit/:slug/thanks' element={<Thankyou/>}/>
+            </Route>
             <Route path='*' element={<h3>Route Not Found</h3>}/>
         </Routes>
         </div>

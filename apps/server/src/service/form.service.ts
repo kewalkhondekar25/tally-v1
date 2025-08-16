@@ -106,6 +106,9 @@ const getPublishedForm = async (formId: string) => {
 
 const submit = async (slug: string, payload: FormSubmitType) => {
 
+    console.log("payload in service", JSON.stringify(payload, null, 2));
+    
+
     const formId = payload.response[0]?.formId;
 
     return await serviceHandler(async () => {
@@ -125,6 +128,9 @@ const submit = async (slug: string, payload: FormSubmitType) => {
                     answer: item.answer
                 }
             });
+
+            console.log("data in service", JSON.stringify(data, null, 2));
+
 
             const { count } = await tx.fieldResponses.createMany({
                 data
