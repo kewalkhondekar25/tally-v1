@@ -1,12 +1,9 @@
-import React from 'react'
+import React from 'react';
+import { tools } from '../data/tools';
 
 const FormIntegration = () => {
 
-    const tools = [
-        { name: "google sheets", img: "https://img.icons8.com/?size=100&id=30461&format=png&color=000000" },
-        { name: "notion", img: "https://img.icons8.com/?size=100&id=uVERmCBZZACL&format=png&color=000000" },
-        { name: "webhooks", img: "https://tally.so/images/integrations/icon_WEBHOOKS.png" },
-    ]
+
 
     return (
         <section className='flex flex-col items-center mx-3'>
