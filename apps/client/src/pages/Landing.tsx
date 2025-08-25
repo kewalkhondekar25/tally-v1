@@ -21,6 +21,8 @@ import PinkCard from "@/components/card/PinkCard";
 import PriceCard from "@/components/card/PriceCard";
 import { Separator } from "@/components/ui/separator";
 import Qna from "@/components/qna/Qna";
+import Socials from "@/components/footer/socials/Socials";
+import FooterNav from "@/components/footer/nav/FooterNav";
 
 const Landing = () => {
 
@@ -53,7 +55,7 @@ const Landing = () => {
             </header>
 
             <section className="min-w-screen flex flex-col justify-center items-center">
-                <img className="mt-16 px-5" src={banner1} alt="banner1" />
+                <img className="mt-16 px-5" src="https://tally.so/images/demo/v2/faces-mobile.png" alt="banner1" />
                 <h1 className="w-72 text-3xl font-semibold text-center mt-10">
                     The <span className="bg-gradient-to-r from-[#9441fa] to-[#f81ce0]
                     bg-clip-text text-transparent capitalize font-bold">
@@ -231,7 +233,7 @@ const Landing = () => {
 
             <footer className="mx-5 mt-10 flex flex-col">
                 <Separator className="my-5"/>
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-6">
                     <div className="relative">
                         <h1 className="text-2xl font-semibold">tally</h1>
                         <Snowflake className="absolute top-1 left-10 h-3.5"/>
@@ -239,6 +241,12 @@ const Landing = () => {
                     <div>
                         <p className="text-sm font-semibold">Made with ❤️ by Kewal Khondekar</p>
                         <p className="text-sm font-semibold">&copy; 2025 tally</p>
+                    </div>
+                    <div>
+                        <Socials/>
+                    </div>
+                    <div>
+                        <FooterNav/>
                     </div>
                 </div>
             </footer>
