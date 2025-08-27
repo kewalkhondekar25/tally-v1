@@ -9,7 +9,7 @@ const Upload = ({ i }: { i: number }) => {
     <div key={i} className='flex justify-center items-center mt-3'>
             <BlockTool i={i} />
             <div>
-                <Question />
+                {/* <Question /> */}
                     <Input
                         className='placeholder:text-gray-400 text-gray-400 px-1 w-48'
                         type='file'
