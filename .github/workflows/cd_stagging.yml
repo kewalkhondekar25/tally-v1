@@ -5,7 +5,7 @@ on:
     branches: ["dev"]
 
 jobs:
-  Re-Deployment of client & server:
+  redeployment-client-server:
     runs-on: ubuntu-latest
     name: Re-Deployment of client & server to stagging server
     steps:
