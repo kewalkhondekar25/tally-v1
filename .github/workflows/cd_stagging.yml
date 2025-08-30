@@ -1,24 +1,27 @@
-name: Stagging DEployment
+name: Deploy to staging
 
 on:
   push:
-    branches: ["dev"]
+    branches: [ "dev" ]
 
 jobs:
-  redeployment-client-server:
+  redeploy_everything:
     runs-on: ubuntu-latest
-    name: Re-Deployment of client & server to stagging server
+    name: Deploying everything to the staging server
     steps:
-      run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ssh_key
-        echo "${{ secrets.STAGGING_IP }}" &> ip
-        echo "yes" | ssh -i ssh_key ubuntu@ip -t "
-        cd tally-v1 && 
-        git pull origin dev &&
-        export PATH=/root/.nvm/versions/node/v22.13.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin &&
-        pnpm install -g pnpm &&
-        pnpm install &&
-        pnpm run build &&
-        pm2 restart stagging-tally-api
-        "
+      - run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
 
+          mkdir -p ~/.ssh
+          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+          ssh -i ~/ssh_key -o StrictHostKeyChecking=no ubuntu@${{ secrets.STAGING_IP }} -t "
+            cd tally-v1 &&
+            git pull origin dev &&
+            export PATH=/root/.nvm/versions/node/v22.13.1/bin:\$PATH &&
+            pnpm install -g pnpm &&
+            pnpm install &&
+            pnpm run build &&
+            pm2 restart staging-tally-api
+          "
