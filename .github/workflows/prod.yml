@@ -1,4 +1,4 @@
-name: Tally Backend Server Deployment
+name: Tally Backend Server API Deployment
 
 on:
   push:
