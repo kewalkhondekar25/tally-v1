@@ -7,7 +7,10 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
+    "db:migrate-dev": "cd packages/db && npx prisma migrate dev",
+    "db:migrate-deploy": "cd packages/db && npx prisma migrate deploy",
     "db:generate": "cd packages/db && npx prisma generate && cd ../../",
+    "build:server": "cd apps/server && tsc -b",
     "start:server": "cd apps/server && node dist/index.js"
   },
   "devDependencies": {
