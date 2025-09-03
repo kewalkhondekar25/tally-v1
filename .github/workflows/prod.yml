@@ -35,9 +35,9 @@ jobs:
           script: |
             sudo docker pull kewalkhondekardev/tally-api:${{ github.sha }}
 
-            docker run --rm \ 
+            docker run --rm \
             -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-            -e PORT={{ secrets.PORT }} \
+            -e PORT=${{ secrets.PORT }} \
             -e CORS_ORIGIN=${{ secrets.CORS_ORIGIN }} \
             -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
             kewalkhondekardev/tally-api:${{ github.sha }} \
@@ -49,7 +49,7 @@ jobs:
             --name tally-api \
             -p 8080:8080 \
             -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-            -e PORT={{ secrets.PORT }} \
+            -e PORT=${{ secrets.PORT }} \
             -e CORS_ORIGIN=${{ secrets.CORS_ORIGIN }} \
             -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
             kewalkhondekardev/tally-api:${{ github.sha }}
