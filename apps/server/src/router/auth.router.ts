@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAuthUser, login, logout, register } from "../controller/auth.controller";
+import { getAuthUser, googleAuthHandler, login, logout, register } from "../controller/auth.controller";
 import { verifyJwt } from "../middleware/auth.middleware";
 import { loginUserSchema, registerUserSchema } from "@repo/common/validation";
 import { validate } from "../middleware/validatation.middleware";
@@ -10,5 +10,6 @@ router.route("/register").post(validate(registerUserSchema), register);
 router.route("/login").post(validate(loginUserSchema), login);
 router.route("/logout").post(verifyJwt, logout);
 router.route("/me").get(verifyJwt, getAuthUser);
+router.route("/google").post(googleAuthHandler);
 
 export default router;

@@ -9,10 +9,16 @@ import { Loader2Icon } from "lucide-react";
 import { signupService } from "../services/auth";
 import { toast } from "sonner"
 import { authSchema, type AuthFormDataType } from "@/validations/auth.validations";
+import { GoogleLogin } from "@react-oauth/google";
+import useAxios from "@/hooks/useAxios";
+import axios from "axios";
+import SetCookie from "@/utils/cookie";
+import { useAppDispatch } from "@/store/hooks";
 
 const SignupForm: React.FC = () => {
-
+    
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const { 
         register, 
@@ -41,11 +47,35 @@ const SignupForm: React.FC = () => {
         }
     };
 
+    const handleGoogleLogin  = async (credentialResponse: any) => {
+        try {
+            console.log(import.meta.env.VITE_GOOGLE_LOGIN_URL);
+            
+            const { credential } = credentialResponse;
+            const res = await axios.post(import.meta.env.VITE_GOOGLE_LOGIN_URL, {
+                token: credential
+            }, { withCredentials: true });
+            if(res.data.statusCode === 200){
+                await SetCookie(dispatch);
+                toast.success("Google login success")
+                navigate("/dashboard");
+            }
+            console.log("user", res.data.user);
+        } catch (error) {
+            console.log(error);
+            toast.error("Google login failed");
+        }
+    };
+
     return (
         <div className="min-h-screen min-w-screen flex justify-center items-center">
-            <div className="min-w-36 mx-5 flex flex-col gap-2">
+            <div className="min-w-36 mx-5 flex flex-col gap-3">
                 <h1 className="text-2xl font-semibold">Create your Tally account</h1>
                 <p className="font-semibold text-gray-400 leading-none">Get started with the simplest way to create forms.</p>
+                <GoogleLogin 
+                    onSuccess={handleGoogleLogin}
+                    onError={() => console.log("Google login failed")}
+                />    
                 <div>
                     <form onSubmit={handleSubmit(handleSignUp)}>
                         <Label className="my-3">Email</Label>

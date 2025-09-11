@@ -5,6 +5,9 @@ import { apiError } from "../utils/errorHandler";
 import { checkPassword, hashPassword } from "../utils/hashing";
 import apiResponse from "../utils/responseHandler";
 import { generateToken } from "../utils/jwt";
+import { OAuth2Client } from "google-auth-library";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const register: RequestHandler = asyncHandler( async (req, res) => {
 
@@ -86,9 +89,41 @@ const getAuthUser: RequestHandler = asyncHandler ( async (req, res) => {
     ));
 });
 
+const googleAuthHandler: RequestHandler = asyncHandler ( async (req, res) => {
+    
+    const { token: googleToken } = req.body;
+    const ticket = await client.verifyIdToken({
+        idToken: googleToken,
+        audience: process.env.GOOGLE_CLIENT_ID
+    });
+    const payload = ticket.getPayload();
+    const { sub, email } = payload as { sub: string, email: string };
+
+    const existingEmail = await authService.get(email);
+    if(!existingEmail){
+        await authService.create(email, sub);
+    };
+
+    const user = await authService.get(email);
+    const token = generateToken(user?.id!, user?.email!);
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    };
+
+    return res.status(200).cookie("accessToken", token, options).json(new apiResponse(
+        true,
+        200,
+        "Google login successfull",
+        user
+    ));
+});
+
 export {
     register,
     login,
     logout,
-    getAuthUser
+    getAuthUser,
+    googleAuthHandler
 };
