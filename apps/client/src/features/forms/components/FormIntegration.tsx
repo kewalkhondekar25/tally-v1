@@ -36,6 +36,9 @@ const FormIntegration = () => {
             case "google sheets":
                 window.location.href = `${import.meta.env.VITE_GOOGLE_SHEET_LOGIN_URL}?formId=${formId}&formName=${encodeURIComponent(res[0].name)}`;
                 break;
+            case "notion":
+                window.location.href = `${import.meta.env.VITE_NOTION_LOGIN_URL}/${formId}/${encodeURIComponent(res[0].name)}`;
+                break;
         }
     };
 

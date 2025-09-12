@@ -6,6 +6,8 @@ import {
     googleSheetAuthHandlerCallback, 
     login, 
     logout, 
+    notionAuthHandler, 
+    notionAuthHandlerCallback, 
     register 
 } from "../controller/auth.controller";
 import { verifyJwt } from "../middleware/auth.middleware";
@@ -18,8 +20,11 @@ router.route("/register").post(validate(registerUserSchema), register);
 router.route("/login").post(validate(loginUserSchema), login);
 router.route("/logout").post(verifyJwt, logout);
 router.route("/me").get(verifyJwt, getAuthUser);
+
 router.route("/google").post(googleAuthHandler);
 router.route("/google-sheet").get(verifyJwt, googleSheetAuthHandler);
 router.route("/google-sheet/callback").get(verifyJwt, googleSheetAuthHandlerCallback);
 
+router.route("/notion/:formId/:formName").get(verifyJwt, notionAuthHandler);
+router.route("/notion/callback").get(verifyJwt, notionAuthHandlerCallback);
 export default router;

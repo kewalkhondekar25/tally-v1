@@ -196,6 +196,56 @@ const googleSheetAuthHandlerCallback: RequestHandler = asyncHandler ( async (req
     return res.redirect(`${process.env.DOMAIN}/form/${state.formId}/integrations`);
 });
 
+//notion
+const notionAuthHandler: RequestHandler = asyncHandler (async (req, res) => {
+
+    const user = (req as any).user;
+    const { formId, formName } = req.params;
+    
+    const url = `https://api.notion.com/v1/oauth/authorize?` +
+    new URLSearchParams({
+      client_id: process.env.NOTION_CLIENT_ID!,
+      redirect_uri: process.env.NOTION_REDIRECT_URI!,
+      response_type: "code",
+      owner: "user",
+      state: encodeURIComponent(JSON.stringify({ email: user.email, formId, formName }))
+    });
+
+  res.redirect(url);
+});
+
+const notionAuthHandlerCallback: RequestHandler = asyncHandler(async (req, res) => {
+
+  const code = req.query.code as string;
+  const state = JSON.parse(decodeURIComponent(req.query.state as string));
+
+  const basicAuth = Buffer.from(
+    `${process.env.NOTION_CLIENT_ID}:${process.env.NOTION_CLIENT_SECRET}`
+  ).toString("base64");
+
+  const response = await fetch("https://api.notion.com/v1/oauth/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Basic ${basicAuth}`,
+    },
+    body: JSON.stringify({
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: process.env.NOTION_REDIRECT_URI,
+    }),
+  });
+
+  const tokens = await response.json();
+  console.log("Notion tokens", tokens);
+
+  // Save tokens in DB
+//   await authService.saveNotionTokens(state.email, tokens);
+
+  return res.redirect(`${process.env.DOMAIN}/form/${state.formId}/integrations`);
+});
+
+
 export {
     register,
     login,
@@ -203,5 +253,7 @@ export {
     getAuthUser,
     googleAuthHandler,
     googleSheetAuthHandler,
-    googleSheetAuthHandlerCallback
+    googleSheetAuthHandlerCallback,
+    notionAuthHandler,
+    notionAuthHandlerCallback
 };

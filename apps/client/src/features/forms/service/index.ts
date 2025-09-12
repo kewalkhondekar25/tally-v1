@@ -117,5 +117,5 @@ export {
     getFormDetails,
     getFormIdBySlug,
     connectGoogleSheet,
-    getSpreadSheet
+    getSpreadSheet,
 };
