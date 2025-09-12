@@ -83,7 +83,31 @@ const getFormIdBySlug = async (slug: string) => {
         console.log(error);
         throw error;
     }
-}
+};
+
+const connectGoogleSheet = async () => {
+    try {
+        const res = await useAxios({
+            method: "GET",
+            url: "/auth/google-sheet"
+        });
+        console.log(res);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const getSpreadSheet = async (formId: string) => {
+    try {
+        const response = await useAxios({
+            method: "GET",
+            url: `/form/get-spread-sheet/${formId}`
+        })
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 export { 
     createForm,
@@ -91,5 +115,7 @@ export {
     getForm,
     getFormResponses,
     getFormDetails,
-    getFormIdBySlug 
+    getFormIdBySlug,
+    connectGoogleSheet,
+    getSpreadSheet
 };

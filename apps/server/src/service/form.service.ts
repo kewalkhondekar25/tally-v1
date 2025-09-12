@@ -168,6 +168,39 @@ const getFormIdBySlug = async (slug: string) => {
     });
 };
 
+const getFormFields = async (formId: string) => {
+    return await serviceHandler( async () => {
+        const fields = await prisma.formFields.findMany({
+            where: { formId },
+            select: { blockQuestion: true }
+        })
+        return fields;
+    });
+};
+
+const createSpreadSheet = async (formId: string, formName: string, spreadSheetId: string, spreadSheetUrl: string) => {
+    return await serviceHandler( async () => {
+        const res = await prisma.spreadSheets.create({
+            data: {
+                formId,
+                formName,
+                spreadSheetId,
+                spreadSheetUrl
+            }
+        });
+        return res;        
+    });
+};
+
+const getSpreadSheet = async (formId: string) => {
+    return await serviceHandler( async () => {
+        const res = await prisma.spreadSheets.findFirst({
+            where: { formId }
+        });
+        return res;        
+    });
+};
+
 export {
     create,
     getAll,
@@ -178,5 +211,8 @@ export {
     getPublishedForm,
     submit,
     getFormResponse,
-    getFormIdBySlug
+    getFormIdBySlug,
+    getFormFields,
+    createSpreadSheet,
+    getSpreadSheet
 };

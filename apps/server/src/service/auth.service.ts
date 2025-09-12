@@ -27,7 +27,26 @@ const create = async (email: string, password: string) => {
     });
 } ;
 
+const saveGoogleSheetRefreshToken = async (email: string, refreshToken: string) => {
+    return await serviceHandler( async () => {
+        return await prisma.$transaction( async (tx) => {
+            const userId = await tx.user.findUnique({
+                where: { email },
+                select: { id: true, email: true }
+            });
+
+            await tx.tokens.create({
+                data: {
+                    userId: userId?.id!,
+                    googleSheetRefreshToken: refreshToken!
+                }
+            })
+        });
+    });
+};
+
 export {
     get,
-    create
+    create,
+    saveGoogleSheetRefreshToken
 };

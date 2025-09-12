@@ -204,6 +204,19 @@ const getPublishSlugForm: RequestHandler = asyncHandler ( async (req, res) => {
     ));
 });
 
+const getSpreadSheet: RequestHandler = asyncHandler ( async (req, res) => {
+
+    const { formId } = req.params;
+    const spreadSheetData = await formService.getSpreadSheet(formId!);
+    
+    return res.status(200).json(new apiResponse(
+        true,
+        200,
+        "Spreadsheet fetched successfully",
+        spreadSheetData
+    ));
+});
+
 export { 
     createForm, 
     getAllForms, 
@@ -214,5 +227,6 @@ export {
     getPublishForm,
     submitForm,
     getFormResponse,
-    getPublishSlugForm 
+    getPublishSlugForm,
+    getSpreadSheet
 };

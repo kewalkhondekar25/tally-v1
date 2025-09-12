@@ -7,6 +7,7 @@ import {
     getFormResponse, 
     getPublishForm, 
     getPublishSlugForm, 
+    getSpreadSheet, 
     saveForm, 
     submitForm, 
     updateForm 
@@ -27,5 +28,6 @@ router.route("/response/:formId").get(verifyJwt, getFormResponse);
 router.route("/:slug").post(validate(formSubmitValidation), submitForm);//public
 router.route("/publish/:formId").get(getPublishForm);
 router.route("/get-published-form/:slug").get(getPublishSlugForm);
+router.route("/get-spread-sheet/:formId").get(verifyJwt, getSpreadSheet);
 
 export default router;
