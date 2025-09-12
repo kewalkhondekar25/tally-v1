@@ -149,12 +149,13 @@ const googleSheetAuthHandlerCallback: RequestHandler = asyncHandler ( async (req
     
 
     const { tokens }: { tokens: any} = await oauth2Client.getToken(code);
-    console.log("google sheets token", tokens);
+    oauth2Client.setCredentials({ refresh_token: tokens.refresh_token });
 
-    await authService.saveGoogleSheetRefreshToken(state.email, tokens.refresh_token);
+    if(tokens.refresh_token){
+        await authService.saveGoogleSheetRefreshToken(state.email, tokens.refresh_token);
+    }
 
     //create spreadsheet
-    oauth2Client.setCredentials({ refresh_token: tokens.refresh_token });
     const sheet = google.sheets({ version: "v4", auth: oauth2Client });
 
     const fields = await formService.getFormFields(state.formId);

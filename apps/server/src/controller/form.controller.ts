@@ -4,14 +4,16 @@ import { apiError } from "../utils/errorHandler";
 import apiResponse from "../utils/responseHandler";
 import { RequestHandler } from "express";
 import { generateSlug } from "../utils/slug";
+import { FormSubmitType } from "@repo/common/types";
+import { google } from "googleapis";
 
-const createForm: RequestHandler = asyncHandler( async (req, res) => {
+const createForm: RequestHandler = asyncHandler(async (req, res) => {
 
     const { workspaceId } = req.body;
     const slug: string = generateSlug();
 
-    const newForm = await formService.create(workspaceId, slug); 
-    if(!newForm){
+    const newForm = await formService.create(workspaceId, slug);
+    if (!newForm) {
         throw apiError("Failed to create new form", 400)
     };
 
@@ -23,15 +25,15 @@ const createForm: RequestHandler = asyncHandler( async (req, res) => {
     ));
 });
 
-const getAllForms: RequestHandler = asyncHandler( async (req, res) => {
+const getAllForms: RequestHandler = asyncHandler(async (req, res) => {
 
     const { workspaceId } = req.params;
-    if(!workspaceId){
+    if (!workspaceId) {
         throw apiError("Workspace id not provided in params", 404);
     };
 
     const forms = await formService.getAll(workspaceId);
-    if(!forms){
+    if (!forms) {
         throw apiError("Failed to fetch all forms", 404)
     };
 
@@ -43,15 +45,15 @@ const getAllForms: RequestHandler = asyncHandler( async (req, res) => {
     ));
 });
 
-const getForm: RequestHandler = asyncHandler (async (req, res) => {
+const getForm: RequestHandler = asyncHandler(async (req, res) => {
 
     const { formId } = req.params;
-    if(!formId){
+    if (!formId) {
         throw apiError("Form id not provided in params", 404);
     }
 
     const form = await formService.get(formId);
-    if(!form){
+    if (!form) {
         throw apiError("Failed to fetch form", 404);
     }
 
@@ -63,17 +65,17 @@ const getForm: RequestHandler = asyncHandler (async (req, res) => {
     ));
 });
 
-const updateForm: RequestHandler = asyncHandler( async (req, res) => {
+const updateForm: RequestHandler = asyncHandler(async (req, res) => {
 
     const { formId } = req.params;
     const { newName } = req.body;
 
-    if(!formId){
+    if (!formId) {
         throw apiError("Form id not provided in params", 404);
     }
 
     const updatedForm = await formService.update(formId, newName);
-    if(!updatedForm){
+    if (!updatedForm) {
         throw apiError("Failed to update form", 404)
     }
 
@@ -85,15 +87,15 @@ const updateForm: RequestHandler = asyncHandler( async (req, res) => {
     ));
 });
 
-const deleteForm: RequestHandler = asyncHandler( async (req, res) => {
+const deleteForm: RequestHandler = asyncHandler(async (req, res) => {
 
     const { formId } = req.params;
-    if(!formId){
+    if (!formId) {
         throw apiError("Form id not provided in params", 404);
     }
 
     const deletedForm = await formService.trash(formId);
-    if(!deletedForm){
+    if (!deletedForm) {
         throw apiError("Failed to delete form", 404)
     }
 
@@ -104,13 +106,13 @@ const deleteForm: RequestHandler = asyncHandler( async (req, res) => {
     ));
 });
 
-const saveForm: RequestHandler = asyncHandler ( async (req, res) => {
-    
+const saveForm: RequestHandler = asyncHandler(async (req, res) => {
+
     const payload = req.body;
-    
+
     const savedForm = await formService.save(payload);
-    
-    if(savedForm.count.count < 1){
+
+    if (savedForm.count.count < 1) {
         throw apiError("Failed to save form fields", 500)
     }
 
@@ -122,16 +124,16 @@ const saveForm: RequestHandler = asyncHandler ( async (req, res) => {
     ))
 });
 
-const getPublishForm: RequestHandler = asyncHandler ( async (req, res) => {
+const getPublishForm: RequestHandler = asyncHandler(async (req, res) => {
 
     const { formId } = req.params;
-    
-    if(!formId){
+
+    if (!formId) {
         throw apiError("Form Id params not found", 404);
     }
 
     const form = await formService.getPublishedForm(formId);
-    if(!form){
+    if (!form) {
         throw apiError("Published form not found", 404)
     };
 
@@ -143,18 +145,42 @@ const getPublishForm: RequestHandler = asyncHandler ( async (req, res) => {
     ));
 });
 
-const submitForm: RequestHandler = asyncHandler ( async (req, res) => {
+const submitForm: RequestHandler = asyncHandler(async (req, res) => {
 
-    const payload = req.body;
+    const oauth2Client = new google.auth.OAuth2(
+        process.env.GOOGLE_SHEET_CLIENT_ID,
+        process.env.GOOGLE_SHEET_CLIENT_SECRET,
+        process.env.GOOGLE_SHEET_REDIRECT_URI
+    );
+
+    const payload: FormSubmitType = req.body;
     const { slug } = req.params;
 
-    if(!slug){
+    if (!slug) {
         throw apiError("Slug not found is params", 404);
     };
 
-    const count = await formService.submit(slug, payload);
-    if(!count || count < 1 ){
+    const submission = await formService.submit(slug, payload);
+    if (!submission.count || submission.count < 1) {
         throw apiError("Failed to submit form", 500);
+    };
+
+    //spread sheet append
+    if (submission.spreadSheetRefreshToken) {
+
+        oauth2Client.setCredentials({ refresh_token: submission.spreadSheetRefreshToken });
+        
+        const sheets = google.sheets({ version: "v4", auth: oauth2Client });
+
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: submission.spreadSheetId,
+            range: "Responses!A1",
+            valueInputOption: "USER_ENTERED",
+            requestBody: {
+                values: [payload.response.map(item => item.answer)]
+            }
+        })
+
     }
 
     return res.status(201).json(new apiResponse(
@@ -164,18 +190,18 @@ const submitForm: RequestHandler = asyncHandler ( async (req, res) => {
     ));
 });
 
-const getFormResponse: RequestHandler = asyncHandler ( async (req, res) => {
+const getFormResponse: RequestHandler = asyncHandler(async (req, res) => {
 
     const { formId } = req.params;
-    if(!formId){
+    if (!formId) {
         throw apiError("No form Id found in params", 404);
     };
 
     const formResponse = await formService.getFormResponse(formId);
-    if(!formResponse){
+    if (!formResponse) {
         throw apiError("Failed to fetched form responses", 500)
     };
-    
+
     return res.status(200).json(new apiResponse(
         true,
         200,
@@ -184,15 +210,15 @@ const getFormResponse: RequestHandler = asyncHandler ( async (req, res) => {
     ));
 });
 
-const getPublishSlugForm: RequestHandler = asyncHandler ( async (req, res) => {
+const getPublishSlugForm: RequestHandler = asyncHandler(async (req, res) => {
 
     const { slug } = req.params;
-    if(!slug){
+    if (!slug) {
         throw apiError("Slug missing in params", 404);
     };
 
     const formId = await formService.getFormIdBySlug(slug);
-    if(!formId){
+    if (!formId) {
         throw apiError("No form found for provided slug", 404);
     }
 
@@ -204,11 +230,11 @@ const getPublishSlugForm: RequestHandler = asyncHandler ( async (req, res) => {
     ));
 });
 
-const getSpreadSheet: RequestHandler = asyncHandler ( async (req, res) => {
+const getSpreadSheet: RequestHandler = asyncHandler(async (req, res) => {
 
     const { formId } = req.params;
     const spreadSheetData = await formService.getSpreadSheet(formId!);
-    
+
     return res.status(200).json(new apiResponse(
         true,
         200,
@@ -217,10 +243,10 @@ const getSpreadSheet: RequestHandler = asyncHandler ( async (req, res) => {
     ));
 });
 
-export { 
-    createForm, 
-    getAllForms, 
-    getForm, 
+export {
+    createForm,
+    getAllForms,
+    getForm,
     updateForm,
     deleteForm,
     saveForm,

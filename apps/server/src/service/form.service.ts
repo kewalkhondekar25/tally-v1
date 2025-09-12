@@ -106,9 +106,6 @@ const getPublishedForm = async (formId: string) => {
 
 const submit = async (slug: string, payload: FormSubmitType) => {
 
-    console.log("payload in service", JSON.stringify(payload, null, 2));
-    
-
     const formId = payload.response[0]?.formId;
 
     return await serviceHandler(async () => {
@@ -136,7 +133,24 @@ const submit = async (slug: string, payload: FormSubmitType) => {
                 data
             });
 
-            return count;
+            const file = await tx.file.findUnique({
+                where: { slug },
+                include: { workspaceOwner: true },
+            });
+
+            const userId = file?.workspaceOwner.userId;
+
+            const spreadSheet = await tx.spreadSheets.findFirst({
+                where: { formId }
+            });
+            const spreadSheetId = spreadSheet?.spreadSheetId;
+
+            const token = await tx.tokens.findUnique({
+                where: { userId }
+            });
+            const spreadSheetRefreshToken = token?.googleSheetRefreshToken
+
+            return { count, spreadSheetRefreshToken, spreadSheetId };
         })
     })
 };

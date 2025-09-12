@@ -35,8 +35,10 @@ const saveGoogleSheetRefreshToken = async (email: string, refreshToken: string) 
                 select: { id: true, email: true }
             });
 
-            await tx.tokens.create({
-                data: {
+            await tx.tokens.upsert({
+                where: { userId: userId?.id },
+                update: { googleSheetRefreshToken: refreshToken! },
+                create: {
                     userId: userId?.id!,
                     googleSheetRefreshToken: refreshToken!
                 }
