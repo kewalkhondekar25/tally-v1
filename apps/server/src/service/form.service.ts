@@ -126,9 +126,6 @@ const submit = async (slug: string, payload: FormSubmitType) => {
                 }
             });
 
-            console.log("data in service", JSON.stringify(data, null, 2));
-
-
             const { count } = await tx.fieldResponses.createMany({
                 data
             });
@@ -139,18 +136,38 @@ const submit = async (slug: string, payload: FormSubmitType) => {
             });
 
             const userId = file?.workspaceOwner.userId;
+            const formName = file?.name;
 
+            //spreadsheet
             const spreadSheet = await tx.spreadSheets.findFirst({
                 where: { formId }
             });
             const spreadSheetId = spreadSheet?.spreadSheetId;
+            
+            //notion
+            const notionDb = await tx.notionDb.findFirst({
+                where: { formId }
+            });
+            const notionDbId = notionDb?.notionDbId;
 
+            //token
             const token = await tx.tokens.findUnique({
                 where: { userId }
             });
-            const spreadSheetRefreshToken = token?.googleSheetRefreshToken
+            const spreadSheetRefreshToken = token?.googleSheetRefreshToken;
+            const notionAccessToken = token?.notionAccessToken;
+            const notionRefreshToken = token?.notionRefreshToken;
 
-            return { count, spreadSheetRefreshToken, spreadSheetId };
+            return { 
+                count, 
+                spreadSheetRefreshToken, 
+                spreadSheetId, 
+                formId,
+                formName,
+                notionDbId,
+                notionAccessToken,
+                notionRefreshToken 
+            };
         })
     })
 };
@@ -215,6 +232,15 @@ const getSpreadSheet = async (formId: string) => {
     });
 };
 
+const getNotionDb = async (formId: string) => {
+    return await serviceHandler( async () => {
+        const res = await prisma.notionDb.findFirst({
+            where: { formId }
+        });
+        return res;
+    });
+};
+
 export {
     create,
     getAll,
@@ -228,5 +254,6 @@ export {
     getFormIdBySlug,
     getFormFields,
     createSpreadSheet,
-    getSpreadSheet
+    getSpreadSheet,
+    getNotionDb
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { tools } from '../data/tools';
-import { connectGoogleSheet, getSpreadSheet } from '../service';
+import { connectGoogleSheet, getNotionDb, getSpreadSheet } from '../service';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import useReduxState from '@/hooks/useReduxState';
@@ -16,6 +16,13 @@ const FormIntegration = () => {
         spreadSheetId: "",
         spreadSheetUrl: ""
     });
+    const [notionDbData, setNotionDbData] = useState({
+        formId: "",
+        service: "",
+        dbId: "",
+        dbName: "",
+        dbUrl: ""
+    });
 
     //@ts-ignore
     const res = workspaces.map(item1 => item1?.files.find(item2 => item2.id === formId));
@@ -26,6 +33,16 @@ const FormIntegration = () => {
             const data = response?.data;
             const { formId: fId, formName, spreadSheetId, spreadSheetUrl } = data;
             setSpreadSheet({ formId: fId, formName, service: "google sheets", spreadSheetId, spreadSheetUrl })
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const fetchNotionDb = async (formId: string) => {
+        try {
+            const response = await getNotionDb(formId);
+            const data = response?.data;
+            setNotionDbData({ formId: data.formId, dbName: data.notionDbName, dbId: data.notionDbId, dbUrl: data.notionDbUrl, service: "notion"});
         } catch (error) {
             console.log(error);
         }
@@ -44,6 +61,7 @@ const FormIntegration = () => {
 
     useEffect(() => {
         fetchSpreadSheet(formId!);
+        fetchNotionDb(formId!);
     }, []);
 
     return (
@@ -58,17 +76,21 @@ const FormIntegration = () => {
             }
             {
                 tools
-                    .filter(item => item.name === spreadSheet.service)
+                    .filter(item => item.name === spreadSheet.service || item.name === notionDbData.service)
+                    // .filter(item => item.name === notionDbData.service)
                     .map((item, i) => {
                         return (
                             <div className='flex justify-start items-center gap-3 w-full my-3' key={i} >
                                 <img src={item.img} alt={item.name} className='h-10 w-10' />
                                 <div className='flex flex-col'>
                                     <div className='flex items-center gap-2'>
-                                        <p className='font-semibold'>{spreadSheet.formName}</p>
+                                        <p className='font-semibold'>{item.name === "google sheets" ? spreadSheet.formName : item.name === "notion" ? notionDbData.dbName : ""}</p>
                                         <div className='h-2 w-2 rounded-full bg-green-500'></div>
                                     </div>
-                                    <p className='text-xs font-semibold text-gray-500'>Submissions are synced with this <span className='underline' onClick={() => window.open(spreadSheet.spreadSheetUrl, "_blank")}>spreadsheet</span></p>
+                                    <p className='text-xs font-semibold text-gray-500'>Submissions are synced with this <span className='underline' onClick={() => window.open(
+                                        item.name === "google sheets" ? spreadSheet.spreadSheetUrl : item.name === "notion" ? notionDbData.dbUrl : "", "_blank")}>
+                                        {item.name === "google sheets" ? "Spreadsheet" : item.name === "notion" ? "Database" : ""}
+                                    </span></p>
                                 </div>
                             </div>
                         )
@@ -83,7 +105,7 @@ const FormIntegration = () => {
             </div>
             {
                 tools
-                    .filter(item => item.name !== spreadSheet.service)
+                    .filter(item => item.name !== spreadSheet.service && item.name !== notionDbData.service)
                     .map((item, i) => {
                         return (
                             <div className='flex flex-col justify-start w-full my-5' key={i}>

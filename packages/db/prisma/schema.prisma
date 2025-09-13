@@ -87,6 +87,8 @@ model Tokens {
   user                    User    @relation(fields: [userId], references: [id])
   refreshToken            String?
   googleSheetRefreshToken String?
+  notionAccessToken       String?
+  notionRefreshToken      String?
 }
 
 model SpreadSheets {
@@ -95,4 +97,12 @@ model SpreadSheets {
   formName       String @default("Unkown")
   spreadSheetId  String
   spreadSheetUrl String
+}
+
+model NotionDb {
+  id          String @id @default(uuid())
+  formId      String
+  notionDbName String
+  notionDbId  String
+  notionDbUrl String
 }

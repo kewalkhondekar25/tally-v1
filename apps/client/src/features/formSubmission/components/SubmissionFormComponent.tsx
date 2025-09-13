@@ -13,7 +13,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from '@/components/ui/calendar';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, Loader2Icon } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
     Select,
@@ -64,7 +64,7 @@ const SubmissionFormComponent = () => {
 
     const {
         register,
-        formState: { errors },
+        formState: { errors, isSubmitting },
         handleSubmit,
         control
     } = useForm<Record<string, string | number | Date | undefined | string[]>>({
@@ -392,7 +392,12 @@ const SubmissionFormComponent = () => {
                         })
                     }
                 </div>
-                <Button className='my-10 w-full'>Submit</Button>
+                <Button className='my-10 w-full' disabled={isSubmitting}>
+                    {
+                        isSubmitting && <Loader2Icon className="animate-spin" />
+                    }
+                    Submit
+                </Button>
             </form>
         </section>
     )

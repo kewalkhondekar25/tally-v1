@@ -5,6 +5,7 @@ import {
     getAllForms, 
     getForm, 
     getFormResponse, 
+    getNotionDb, 
     getPublishForm, 
     getPublishSlugForm, 
     getSpreadSheet, 
@@ -29,5 +30,6 @@ router.route("/:slug").post(validate(formSubmitValidation), submitForm);//public
 router.route("/publish/:formId").get(getPublishForm);
 router.route("/get-published-form/:slug").get(getPublishSlugForm);
 router.route("/get-spread-sheet/:formId").get(verifyJwt, getSpreadSheet);
+router.route("/get-notion-db/:formId").get(verifyJwt, getNotionDb);
 
 export default router;

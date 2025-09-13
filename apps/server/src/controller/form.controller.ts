@@ -169,7 +169,7 @@ const submitForm: RequestHandler = asyncHandler(async (req, res) => {
     if (submission.spreadSheetRefreshToken) {
 
         oauth2Client.setCredentials({ refresh_token: submission.spreadSheetRefreshToken });
-        
+
         const sheets = google.sheets({ version: "v4", auth: oauth2Client });
 
         await sheets.spreadsheets.values.append({
@@ -181,6 +181,67 @@ const submitForm: RequestHandler = asyncHandler(async (req, res) => {
             }
         })
 
+    };
+
+    //append notion db
+    if (submission.notionAccessToken) {
+
+        //get formfields
+        const questions = await formService.getFormFields(submission.formId!);
+        const notionAppendData = questions.map(item1 => {
+            return {
+                [item1.blockQuestion]: {
+                    rich_text: payload.response.map(item2 => {
+                        return [{ text: { content: item2.answer } }]
+                    })
+                }
+            }
+        })
+
+        const response = await fetch("https://api.notion.com/v1/pages", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${submission.notionAccessToken}`,
+                "Content-Type": "application/json",
+                "Notion-Version": "2025-09-03",
+            },
+            body: JSON.stringify({
+                parent: { database_id: submission.notionDbId },
+                properties: Object.fromEntries(
+                    questions.map((q, i) => {
+                        const isTitle = i === 0;
+                        return [
+                            q.blockQuestion,
+                            isTitle
+                                ? {
+                                    title: [
+                                        {
+                                            text: {
+                                                content: String(payload.response[i]?.answer ?? ""),
+                                            },
+                                        },
+                                    ],
+                                }
+                                : {
+                                    rich_text: [
+                                        {
+                                            text: {
+                                                content: String(payload.response[i]?.answer ?? ""),
+                                            },
+                                        },
+                                    ],
+                                },
+                        ];
+                    })
+                ),
+            }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            console.log("Failed to save data in notion");
+        }
     }
 
     return res.status(201).json(new apiResponse(
@@ -243,6 +304,19 @@ const getSpreadSheet: RequestHandler = asyncHandler(async (req, res) => {
     ));
 });
 
+const getNotionDb: RequestHandler = asyncHandler(async (req, res) => {
+
+    const { formId } = req.params;
+    const notionDbData = await formService.getNotionDb(formId!);
+
+    return res.status(200).json(new apiResponse(
+        true,
+        200,
+        "Spreadsheet fetched successfully",
+        notionDbData
+    ));
+});
+
 export {
     createForm,
     getAllForms,
@@ -254,5 +328,6 @@ export {
     submitForm,
     getFormResponse,
     getPublishSlugForm,
-    getSpreadSheet
+    getSpreadSheet,
+    getNotionDb
 };

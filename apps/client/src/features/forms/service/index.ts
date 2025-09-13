@@ -109,6 +109,18 @@ const getSpreadSheet = async (formId: string) => {
     }
 };
 
+const getNotionDb = async (formId: string) => {
+    try {
+        const response = await useAxios({
+            method: "GET",
+            url: `/form/get-notion-db/${formId}`
+        })
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export { 
     createForm,
     saveForm,
@@ -118,4 +130,5 @@ export {
     getFormIdBySlug,
     connectGoogleSheet,
     getSpreadSheet,
+    getNotionDb
 };

@@ -239,8 +239,30 @@ const notionAuthHandlerCallback: RequestHandler = asyncHandler(async (req, res) 
   const tokens = await response.json();
   console.log("Notion tokens", tokens);
 
-  // Save tokens in DB
-//   await authService.saveNotionTokens(state.email, tokens);
+  await authService.saveNotionToken(state.email, tokens.access_token, tokens.refresh_token);
+
+  const dbInfo = await fetch("https://api.notion.com/v1/search", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${tokens.access_token}`,
+      "Content-Type": "application/json",
+      "Notion-Version": "2022-06-28",
+    },
+    body: JSON.stringify({
+      filter: {
+        property: "object",
+        value: "database",
+      },
+    }),
+  });
+  const notionDbData = await dbInfo.json();
+//   console.log(JSON.stringify(notionDbData, null, 2));
+  
+  const dbId = notionDbData.results[0].id;
+  const dbName = notionDbData.results[0].title[0].text.content;
+  const dbUrl = notionDbData.results[0].url;
+
+  await authService.saveNotionDbData(state.formId, dbId, dbName, dbUrl);
 
   return res.redirect(`${process.env.DOMAIN}/form/${state.formId}/integrations`);
 });
