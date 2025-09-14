@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import navLinks from '@/utils/data'
 import { Link } from 'react-router-dom'
-import { Timer } from 'lucide-react'
+import { Loader2Icon, Timer } from 'lucide-react'
 import { Progress } from "@/components/ui/progress"
-import { closeSidebar } from '@/store/features/sidebar/sidebarSlice'
-import Workspace from '@/pages/Workspace'
+import { closeSidebar } from '@/store/features/sidebar/sidebarSlice';
+
+const Workspace = lazy(() => import("@/pages/Workspace"));
 
 const Navbar = () => {
 
@@ -37,7 +38,10 @@ const Navbar = () => {
                     })
                 }
             </nav>
-            <Workspace />
+            <Suspense fallback={<div className="flex justify-center items-center h-screen">
+                <Loader2Icon className="animate-spin" /></div>}>
+                <Workspace />
+            </Suspense>
         </div>
     )
 }

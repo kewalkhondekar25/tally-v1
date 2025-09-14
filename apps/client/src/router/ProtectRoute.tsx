@@ -1,7 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Navigate, Outlet } from "react-router-dom";
-import { PanelLeftOpen } from "lucide-react"
+import { Loader2Icon, PanelLeftOpen } from "lucide-react"
 import { openSidebar } from "@/store/features/sidebar/sidebarSlice";
+import { Suspense } from "react";
 
 const ProtectRoute = () => {
 
@@ -21,7 +22,10 @@ const ProtectRoute = () => {
             <div className="p-3 w-full text-gray-400 absolute z-10">
                 <PanelLeftOpen  onClick={() => dispatch(openSidebar())}/>
             </div>
-            <Outlet/>
+            <Suspense fallback={<div className="flex justify-center items-center h-screen">
+                <Loader2Icon className="animate-spin"/></div>}>
+                <Outlet/>
+            </Suspense>
         </div>
     );
 };

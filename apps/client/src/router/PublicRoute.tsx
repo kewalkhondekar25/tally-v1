@@ -14,7 +14,8 @@ const PublicRoute = () => {
         return <Navigate to="/dashboard" replace/>
     };
 
-    return <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2Icon className="animate-spin"/></div>}>
+    return <Suspense fallback={<div className="flex justify-center items-center h-screen">
+        <Loader2Icon className="animate-spin"/></div>}>
         <Outlet/>
     </Suspense> 
 };

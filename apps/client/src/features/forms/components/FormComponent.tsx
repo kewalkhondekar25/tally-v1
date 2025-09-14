@@ -1,16 +1,16 @@
 import { Input } from '@/components/ui/input';
-import { ArrowRight, File, GripVertical, LayoutTemplate, Plus, Trash2 } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
-import BlockPicker from './BlockPicker';
+import { ArrowRight, File, GripVertical, LayoutTemplate, Loader2Icon, Plus, Trash2 } from 'lucide-react';
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { closeBlockPicker, deleteBlocks, openBlockPicker } from '@/store/features/blockpicker/blockerPickerSlice';
-import Blocks from './Blocks';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@radix-ui/react-tooltip';
 import useReduxState from '@/hooks/useReduxState';
 import { useNavigate, useParams } from 'react-router-dom';
 import { saveForm } from '../service';
 import { toast } from 'sonner';
+const Blocks = lazy(() => import("./Blocks"));
+const BlockPicker = lazy(() => import("./BlockPicker"));
 
 const FormComponent = () => {
 
@@ -70,7 +70,7 @@ const FormComponent = () => {
             .filter(item => item.name === "checkboxes")
             .filter(item => !item.options);
 
-        if(noCheckboxesOpt.length >= 1){
+        if (noCheckboxesOpt.length >= 1) {
             return toast.error("Checkboxes Options are Required!");
         }
 
@@ -78,7 +78,7 @@ const FormComponent = () => {
             .filter(item => item.name === "dropdown")
             .filter(item => !item.options);
 
-        if(noDropdownOpt.length >= 1){
+        if (noDropdownOpt.length >= 1) {
             return toast.error("Dropdown Options are Required!");
         }
 
@@ -166,7 +166,10 @@ const FormComponent = () => {
             }
 
             {/* BLOCKS */}
-            <Blocks />
+            <Suspense fallback={<div className="flex justify-center items-center">
+                <Loader2Icon className="animate-spin" /></div>}>
+                <Blocks />
+            </Suspense>
 
             {
                 isToolOpen && (
@@ -185,7 +188,14 @@ const FormComponent = () => {
                             className="border-none text-gray-700 w-52
                             ring-0 focus-visible:ring-0 focus:ring-0 focus:outline-none ml-1 
                             shadow-none" />
-                        {isBlockerPickerOpen && <BlockPicker indexRef={indexRef} />}
+                        {
+                            isBlockerPickerOpen &&
+                            <Suspense
+                                fallback={<div className="flex justify-center items-center">
+                                    <Loader2Icon className="animate-spin" /></div>}>
+                                <BlockPicker indexRef={indexRef} />
+                            </Suspense>
+                        }
                     </div>
                 )
             }
