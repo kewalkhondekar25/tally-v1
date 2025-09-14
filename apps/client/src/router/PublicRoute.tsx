@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { Navigate, Outlet } from "react-router-dom";
+import { Loader2Icon } from "lucide-react";
 
 const PublicRoute = () => {
 
@@ -12,7 +14,9 @@ const PublicRoute = () => {
         return <Navigate to="/dashboard" replace/>
     };
 
-    return <Outlet/>
+    return <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2Icon className="animate-spin"/></div>}>
+        <Outlet/>
+    </Suspense> 
 };
 
 export default PublicRoute;

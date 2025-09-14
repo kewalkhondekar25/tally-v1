@@ -237,7 +237,6 @@ const notionAuthHandlerCallback: RequestHandler = asyncHandler(async (req, res) 
   });
 
   const tokens = await response.json();
-  console.log("Notion tokens", tokens);
 
   await authService.saveNotionToken(state.email, tokens.access_token, tokens.refresh_token);
 

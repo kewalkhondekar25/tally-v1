@@ -1,14 +1,16 @@
+import { lazy } from "react";
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Landing from './pages/Landing';
-import { Signup, Login} from "./pages/Signup";
-import { Toaster } from "@/components/ui/sonner"
+import PublicRoute from './router/PublicRoute';
 import ProtectRoute from './router/ProtectRoute';
+const Landing = lazy(() => import("./pages/Landing"));
+const Signup = lazy(() => import("./pages/Signup").then(module => ({ default: module.Signup})));
+const Login = lazy(() => import("./pages/Signup").then(module => ({ default: module.Login})));
+import { Toaster } from "@/components/ui/sonner";
 import Dashboard from './pages/Dashboard';
 import setCookie from './utils/cookie';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { useEffect } from 'react';
-import PublicRoute from './router/PublicRoute';
 import Sidebar from './components/sidebar/Sidebar';
 import { getAllWorkspaces } from './features/workspaces/service';
 import { setWorkspaces } from './store/features/workspace/workspaceSlice';
@@ -50,8 +52,6 @@ function App() {
             </Route>
             <Route element={<PublicRoute/>}>
               <Route path='/signup' element={<Signup/>} />
-            </Route>
-            <Route element={<PublicRoute/>}>
               <Route path='/login' element={<Login/>} />
             </Route>
             <Route element={<ProtectRoute/>}>
