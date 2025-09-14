@@ -5,15 +5,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authSchema, type AuthFormDataType } from "@/validations/auth.validations";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, Snowflake } from "lucide-react";
 import { loginService } from "../services/auth";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/store/hooks";
 import SetCookie from "@/utils/cookie";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import type React from "react";
 
-const LoginForm = () => {
+const LoginForm: React.FC = () => {
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -65,7 +66,10 @@ const LoginForm = () => {
 
     return (
         <div className="min-h-screen min-w-screen flex justify-center items-center">
-            <div className="min-w-36 mx-5 flex flex-col gap-2">
+            <div className="min-w-36 mx-5 flex flex-col gap-3">
+                <Link to="/">
+                    <Snowflake/>
+                </Link>
                 <h1 className="text-2xl font-semibold">Welcome back</h1>
                 <p className="font-semibold text-gray-400 leading-none">Get with the simplest way to create forms.</p>
                 <GoogleLogin

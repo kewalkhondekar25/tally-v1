@@ -5,12 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, Snowflake } from "lucide-react";
 import { signupService } from "../services/auth";
 import { toast } from "sonner"
 import { authSchema, type AuthFormDataType } from "@/validations/auth.validations";
 import { GoogleLogin } from "@react-oauth/google";
-import useAxios from "@/hooks/useAxios";
 import axios from "axios";
 import SetCookie from "@/utils/cookie";
 import { useAppDispatch } from "@/store/hooks";
@@ -70,7 +69,10 @@ const SignupForm: React.FC = () => {
     return (
         <div className="min-h-screen min-w-screen flex justify-center items-center">
             <div className="min-w-36 mx-5 flex flex-col gap-3">
-                <h1 className="text-2xl font-semibold">Create your Tally account</h1>
+                <Link to="/">
+                    <Snowflake/>
+                </Link>
+                <h1 className="text-2xl font-semibold">Create your Typely account</h1>
                 <p className="font-semibold text-gray-400 leading-none">Get started with the simplest way to create forms.</p>
                 <GoogleLogin 
                     onSuccess={handleGoogleLogin}

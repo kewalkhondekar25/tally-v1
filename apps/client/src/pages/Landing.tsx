@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import banner1 from "../assets/banner1.png";
 import {
     Command,
     Lock,
@@ -33,8 +32,8 @@ const Landing = () => {
 
             <header className="flex justify-between p-3">
                 <div className="relative">
-                        <h1 className="text-2xl font-semibold">tally</h1>
-                        <Snowflake className="absolute top-1 left-10 h-3.5"/>
+                        <h1 className="text-2xl font-semibold">Typely</h1>
+                        <Snowflake className="absolute top-1 left-17 h-3.5"/>
                     </div>
                 <div>
                     <Link to="login">
@@ -60,16 +59,18 @@ const Landing = () => {
                     The <span className="bg-gradient-to-r from-[#9441fa] to-[#f81ce0]
                     bg-clip-text text-transparent capitalize font-bold">
                         simplest</span> way to create forms</h1>
-                <p className="w-72 text-center mt-5 font-semibold text-gray-600">
-                    Say goodbye to boring forms. Meet Tally — the free, intuitive form builder you’ve been looking for.
+                <p className="w-full text-center mt-5 font-semibold text-gray-600">
+                    Say goodbye to boring forms. Meet Typely — the free, intuitive form builder you’ve been looking for.
                 </p>
-                <Button className="mt-5 bg-[#006fd6] font-semibold">Create a free form</Button>
+                <Link to="/signup">
+                    <Button className="mt-5 bg-[#006fd6] font-semibold">Create a free form</Button>
+                </Link>
             </section>
 
             <section className="flex flex-col mx-3 mt-10">
                 <div className="flex flex-col">
                     <h1 className="text-xl font-semibold">A form builder like no other</h1>
-                    <p className="mt-2 text-gray-600 font-semibold">Tally makes it simple for anyone to build free online forms.
+                    <p className="mt-2 text-gray-600 font-semibold">Typely makes it simple for anyone to build free online forms.
                         No need to code — just type your questions like you would in a doc.
                     </p>
                 </div>
@@ -77,7 +78,7 @@ const Landing = () => {
 
                     <PinkCard
                         title="Unlimited forms and submissions for free"
-                        subtitle="Tally gives you unlimited forms and submissions, completely free,
+                        subtitle="Typely gives you unlimited forms and submissions, completely free,
                         as long as you stay within our fair usage guidelines."
                         url="https://tally.so/images/demo/v2/designed-for-you.png"
                         urlName="banner3"
@@ -90,7 +91,7 @@ const Landing = () => {
                                 <div className="flex flex-col gap-2">
                                     <Command className="text-[#f81ce5]" />
                                     <p className="text-lg font-bold">Just start typing</p>
-                                    <p className="font-medium text-gray-600">Tally is a new type of online form builder that works like a text document.
+                                    <p className="font-medium text-gray-600">Typely is a new type of online form builder that works like a text document.
                                         Just start typing on the page and insert blocks same as Notion.
                                     </p>
                                 </div>
@@ -106,9 +107,9 @@ const Landing = () => {
                                     <p className="font-medium text-gray-600">Your data privacy and security are our top priorities.
                                         We are GDPR compliant and treat your data with care and confidentiality.
                                     </p>
-                                    <p className="font-medium text-gray-600">Tally is hosted in India,
+                                    <p className="font-medium text-gray-600">Typely is hosted in India,
                                         we don’t use cookie-tracking, and all form data is securely stored,
-                                        and encrypted both in transit and at rest. Learn more about Tally.
+                                        and encrypted both in transit and at rest. Learn more about Typely.
                                     </p>
                                 </div>
                             </div>
@@ -121,7 +122,7 @@ const Landing = () => {
             <section className="mt-10 mx-5">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-xl text-gray-400 font-semibold">
-                        “Loving Tally! Not sure why I only started using it now, so good!”
+                        “Loving Typely! Not sure why I only started using it now, so good!”
                     </h1>
                     <div className="flex items-center gap-2">
                         <Avatar className="w-10 h-10">
@@ -152,9 +153,9 @@ const Landing = () => {
                     <div className="p-3">
                         <div className="flex flex-col gap-2">
                             <LinkIcon className="text-[#f81ce5]" />
-                            <p className="text-lg font-bold">Tally Links</p>
+                            <p className="text-lg font-bold">Typely Links</p>
                             <p className="font-medium text-gray-600">
-                                Share your unique Tally form link with anyone.
+                                Share your unique Typely form link with anyone.
                             </p>
                             <div className="flex justify-between items-center gap-2">
                                 <Input value="tally.dev/form/eQywAk" readOnly />
@@ -207,7 +208,7 @@ const Landing = () => {
                 <div className="flex flex-col">
                     <h3 className="text-2xl font-bold
                     bg-gradient-to-r from-[#9441fa] to-[#f81ce0]
-                    bg-clip-text text-transparent capitalize">Do more with Tally</h3>
+                    bg-clip-text text-transparent capitalize">Do more with Typely</h3>
                     <p className="text-base font-medium text-gray-700">Upgrade to access advanced features designed for growing teams and creators.</p>
                 </div>
                 <PriceCard plan="pro" price="10" />
@@ -227,7 +228,9 @@ const Landing = () => {
                 <div className="flex flex-col justify-center items-center gap-3">
                     <h1 className="text-xl font-bold">Build stunning forms for free</h1>
                     <p className="text-base text-gray-700">It’s as simple as one-two-three</p>
-                    <Button className="mt-5 bg-[#006fd6] font-semibold">Create a free form</Button>
+                    <Link to="/signup">
+                        <Button className="mt-5 bg-[#006fd6] font-semibold">Create a free form</Button>
+                    </Link>
                 </div>
             </section>
 
@@ -235,12 +238,12 @@ const Landing = () => {
                 <Separator className="my-5"/>
                 <div className="flex flex-col gap-6">
                     <div className="relative">
-                        <h1 className="text-2xl font-semibold">tally</h1>
-                        <Snowflake className="absolute top-1 left-10 h-3.5"/>
+                        <h1 className="text-2xl font-semibold">Typely</h1>
+                        <Snowflake className="absolute top-1 left-17 h-3.5"/>
                     </div>
                     <div>
                         <p className="text-sm font-semibold">Made with ❤️ by Kewal Khondekar</p>
-                        <p className="text-sm font-semibold">&copy; 2025 tally</p>
+                        <p className="text-sm font-semibold">&copy; 2025 Typely</p>
                     </div>
                     <div>
                         <Socials/>
