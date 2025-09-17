@@ -3,7 +3,7 @@ import React from 'react'
 
 const FooterNav = () => {
   return (
-    <div>
+    <div className='sm:grid sm:grid-flow-col grid-cols-4'>
         {
             footerNavLinks.map((item, i) => {
                 return(

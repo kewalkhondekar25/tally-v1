@@ -8,7 +8,7 @@ const PriceCard = ({ plan, price }: {
 
 }) => {
     return (
-        <div className="border-1 shadow-sm shadow-gray-500 rounded-lg">
+        <div className="border-1 shadow-sm shadow-gray-500 rounded-lg flex-1">
             <div className="p-3">
                 <div className="flex justify-between items-center">
                     <p className="text-lg font-bold capitalize">{plan}</p>

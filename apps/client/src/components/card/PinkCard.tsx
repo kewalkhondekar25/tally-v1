@@ -11,14 +11,17 @@ const PinkCard = ({ title, subtitle, url, urlName }: {
             <div className="p-3 flex flex-col gap-1 text-gray-700">
                 <p 
                     className="bg-gradient-to-r from-[#9441fa] to-[#f81ce0]
-                            bg-clip-text text-transparent text-xl font-bold"
+                            bg-clip-text text-transparent text-xl font-bold
+                            sm:text-2xl"
                     >
                     {title}
                 </p>
                 <p className="font-medium text-gray-600">
                     {subtitle}
                 </p>
-                <img src={url} alt="banner2" />
+                <div className='sm:flex sm:justify-center sm:items-center'>
+                    <img className='sm:w-sm' src={url} alt="banner2" />
+                </div>
             </div>
         </div>
     )
