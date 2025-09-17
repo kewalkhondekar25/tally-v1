@@ -23,6 +23,7 @@ import { setWorkspaces } from './store/features/workspace/workspaceSlice';
 import Thankyou from './pages/Thankyou';
 import { Loader2Icon } from "lucide-react";
 import NotFound from "./pages/NotFound";
+import { openSidebar } from "./store/features/sidebar/sidebarSlice";
 
 function App() {
 
@@ -86,7 +87,7 @@ function App() {
               <Route path='submit/:slug/thanks'
                 element={<Suspense fallback={<div className="flex justify-center items-center h-screen">
                   <Loader2Icon className="animate-spin" /></div>}>
-                  <SubmissionForm />
+                  {/* <SubmissionForm /> */}
                   <Thankyou />
                 </Suspense>} />
             </Route>

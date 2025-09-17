@@ -72,7 +72,7 @@ const FormSubmission = () => {
 
     return (
         <Table className='mt-10'>
-            <TableCaption>Submit Responses</TableCaption>
+            <TableCaption>Submited Responses</TableCaption>
             <TableHeader>
                 <TableRow>
                     {

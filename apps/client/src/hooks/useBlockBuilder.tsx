@@ -21,7 +21,7 @@ const useBlockBuilder = () => {
     };
 
     return (
-        <>
+        <div>
             {
                 blockName.map((item, i) => {
 
@@ -66,7 +66,7 @@ const useBlockBuilder = () => {
                     }
                 })
             }
-        </>
+        </div>
     );
 };
 

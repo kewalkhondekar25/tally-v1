@@ -8,7 +8,8 @@ const Console = () => {
   const { email } = useAppSelector(state => state.auth);
   
   return (
-    <div className='absolute bottom-0 h-12 min-w-11/12 mx-1 my-3 border-1 border-gray-400 rounded-full flex justify-between items-center p-3'>
+    <div className='absolute bottom-0 h-12 min-w-11/12 mx-1 my-3 border-1 border-gray-400 rounded-full flex justify-between items-center p-3
+    sm:right-0'>
       <div className='flex justify-center items-center gap-1'>
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" />

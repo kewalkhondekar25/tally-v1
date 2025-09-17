@@ -20,7 +20,9 @@ const Phone = ({ i }: { i: number }) => {
         dispatch(setPlaceholder({ placeholder: blockValues.placeholder, index: currentBlockIndex! }));
     };
     return (
-        <div key={i} className='flex justify-center items-center mt-3'>
+        <div key={i} 
+            className='flex justify-center items-center mt-3
+            sm:justify-start sm:w-80'>
             <BlockTool i={i} />
             <div>
                 <Question index={currentBlockIndex!}/>
@@ -28,7 +30,8 @@ const Phone = ({ i }: { i: number }) => {
                     <Input
                         onChange={(e) => setBlockValues(prev => ({ ...prev, placeholder: e.target.value }))}
                         onBlur={handleBlur}
-                        className='placeholder:text-gray-400 text-gray-400 px-1'
+                        className='placeholder:text-gray-400 text-gray-400 px-1
+                        sm:w-80'
                         placeholder='Type placeholder text'
                         type='text'
                     />

@@ -27,9 +27,10 @@ const Sidebar = () => {
 
   return (
     <div
-      className='min-h-screen min-w-screen bg-white px-3 py-3 text-gray-400
-        relative'>
-      <PanelLeftClose onClick={() => dispatch(closeSidebar())} />
+      className='min-h-screen w-screen bg-white border-r border-gray-200 px-3 py-3 text-gray-400
+        relative
+        sm:w-64'>
+      <PanelLeftClose className='cursor-pointer' onClick={() => dispatch(closeSidebar())} />
       <Suspense fallback={<div className="flex justify-center items-center h-screen">
         <Loader2Icon className="animate-spin" /></div>}>
         <Navbar />

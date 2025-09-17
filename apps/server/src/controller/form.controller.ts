@@ -166,7 +166,7 @@ const submitForm: RequestHandler = asyncHandler(async (req, res) => {
     };
 
     //spread sheet append
-    if (submission.spreadSheetRefreshToken) {
+    if (submission.spreadSheetRefreshToken && submission.spreadSheetId) {
 
         oauth2Client.setCredentials({ refresh_token: submission.spreadSheetRefreshToken });
 
@@ -184,7 +184,7 @@ const submitForm: RequestHandler = asyncHandler(async (req, res) => {
     };
 
     //append notion db
-    if (submission.notionAccessToken) {
+    if (submission.notionAccessToken && submission.notionDbId) {
 
         //get formfields
         const questions = await formService.getFormFields(submission.formId!);

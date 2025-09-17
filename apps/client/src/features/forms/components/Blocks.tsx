@@ -7,9 +7,9 @@ const Blocks = () => {
   const GeneratedBlock = useBlockBuilder();
 
   return(
-    <>
+    <div>
       {GeneratedBlock}
-    </>
+    </div>
   )
 }
 

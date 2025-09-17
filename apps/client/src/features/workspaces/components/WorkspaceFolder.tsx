@@ -91,7 +91,7 @@ const WorkspaceFolder = () => {
                                         </div>
                                         <div className="flex">
                                             <span className="relative">
-                                                <Tooltip>
+                                                {/* <Tooltip>
                                                     <TooltipTrigger asChild>
                                                         <Ellipsis 
                                                             className='h-4 opacity-100 sm:opacity-0 group-hover:opacity-100'
@@ -102,7 +102,7 @@ const WorkspaceFolder = () => {
                                                     <TooltipContent>
                                                         <p>Rename, Delete</p>
                                                     </TooltipContent>
-                                                </Tooltip>
+                                                </Tooltip> */}
                                                 {
                                                     isOpen.state && isOpen.id === item.id && (
                                                         <div 

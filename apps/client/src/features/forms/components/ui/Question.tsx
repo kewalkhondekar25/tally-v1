@@ -22,7 +22,8 @@ const Question = ({ index }: { index: number }) => {
             className="border-none text-gray-700 w-64
             ring-0 focus-visible:ring-0 focus:ring-0 focus:outline-none ml-1 
             shadow-none px-0 text-lg font-semibold
-            placeholder:text-lg placeholder:font-semibold placeholder:text-gray-350"
+            placeholder:text-lg placeholder:font-semibold placeholder:text-gray-350
+            sm:text-xl md:text-xl"
         />
     );
 };

@@ -34,7 +34,9 @@ const DropDown = ({ i }: { i: number }) => {
     };
 
     return (
-        <div key={i} className='flex justify-center items-center mt-3'>
+        <div key={i} 
+            className='flex justify-center items-center mt-3 
+            sm:justify-start sm:w-80'>
             <BlockTool i={i} />
             <div>
                 <Question index={currentBlockIndex!} />

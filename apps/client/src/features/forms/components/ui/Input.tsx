@@ -27,7 +27,8 @@ const InputComponent = ({ i }: { i: number }) => {
                 <Input
                     onChange={(e) => setBlockValues(prev => ({ ...prev, placeholder: e.target.value }))}
                     onBlur={handleBlur}
-                    className='placeholder:text-gray-400 text-gray-400'
+                    className='placeholder:text-gray-400 text-gray-400
+                    sm:w-80 sm:placeholder:text-lg md:w-80'
                     placeholder='Type placeholder text'
                 />
             </div>

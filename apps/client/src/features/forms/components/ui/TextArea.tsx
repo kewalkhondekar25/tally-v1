@@ -26,7 +26,8 @@ const TextAreaComponent = ({ i }: { i: number }) => {
         <Textarea
           onChange={(e) => setBlockValues(prev => ({ ...prev, placeholder: e.target.value }))}
           onBlur={handleBlur}
-          className='placeholder:text-gray-400 text-gray-400 w-64'
+          className='placeholder:text-gray-400 text-gray-400 w-64
+          sm:w-80 sm:placeholder:text-lg md:w-80 md:placeholder:text-lg'
           placeholder='Type placeholder text' />
       </div>
     </div>

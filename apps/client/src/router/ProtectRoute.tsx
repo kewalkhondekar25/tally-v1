@@ -20,7 +20,7 @@ const ProtectRoute = () => {
     return(
         <div className="relative">
             <div className="p-3 w-full text-gray-400 absolute z-10">
-                <PanelLeftOpen  onClick={() => dispatch(openSidebar())}/>
+                <PanelLeftOpen className='cursor-pointer' onClick={() => dispatch(openSidebar())}/>
             </div>
             <Suspense fallback={<div className="flex justify-center items-center h-screen">
                 <Loader2Icon className="animate-spin"/></div>}>

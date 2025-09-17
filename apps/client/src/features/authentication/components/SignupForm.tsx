@@ -100,7 +100,7 @@ const SignupForm: React.FC = () => {
                             errors.password && <p className="text-red-500 text-xs font-semibold">{errors.password?.message}</p>
                         }
 
-                        <Button className="mt-5 w-full" disabled={isSubmitting}>
+                        <Button className="mt-5 w-full cursor-pointer" disabled={isSubmitting}>
                             {
                                 isSubmitting && <Loader2Icon className="animate-spin" />
                             }

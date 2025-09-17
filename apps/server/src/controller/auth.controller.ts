@@ -255,7 +255,7 @@ const notionAuthHandlerCallback: RequestHandler = asyncHandler(async (req, res) 
     }),
   });
   const notionDbData = await dbInfo.json();
-//   console.log(JSON.stringify(notionDbData, null, 2));
+  console.log(JSON.stringify(notionDbData, null, 2));
   
   const dbId = notionDbData.results[0].id;
   const dbName = notionDbData.results[0].title[0].text.content;

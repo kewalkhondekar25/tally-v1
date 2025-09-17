@@ -42,7 +42,9 @@ const FormShare = () => {
     }, []);
 
     return (
-        <section className='flex flex-col items-center mx-3'>
+        <section 
+            className='flex flex-col items-center mx-3
+            sm:w-80'>
             <div className='my-5'>
                 <h1 className='text-xl font-semibold'>Share Link</h1>
                 <p className='mt-3 text-sm text-gray-700'>Your form is now published and ready to be shared with the world! 

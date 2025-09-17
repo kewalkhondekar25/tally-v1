@@ -25,7 +25,9 @@ const FormIntegration = () => {
     });
 
     //@ts-ignore
-    const res = workspaces.map(item1 => item1?.files.find(item2 => item2.id === formId));
+    const res = workspaces.map(item1 => item1?.files.find(item2 => item2.id === formId)).filter(item => item !== undefined)
+    console.log("res", res);
+    
 
     const fetchSpreadSheet = async (formId: string) => {
         try {
@@ -87,7 +89,7 @@ const FormIntegration = () => {
                                         <p className='font-semibold'>{item.name === "google sheets" ? spreadSheet.formName : item.name === "notion" ? notionDbData.dbName : ""}</p>
                                         <div className='h-2 w-2 rounded-full bg-green-500'></div>
                                     </div>
-                                    <p className='text-xs font-semibold text-gray-500'>Submissions are synced with this <span className='underline' onClick={() => window.open(
+                                    <p className='text-xs font-semibold text-gray-500 cursor-pointer'>Submissions are synced with this <span className='underline' onClick={() => window.open(
                                         item.name === "google sheets" ? spreadSheet.spreadSheetUrl : item.name === "notion" ? notionDbData.dbUrl : "", "_blank")}>
                                         {item.name === "google sheets" ? "Spreadsheet" : item.name === "notion" ? "Database" : ""}
                                     </span></p>
@@ -96,7 +98,7 @@ const FormIntegration = () => {
                         )
                     })
             }
-            <div className='my-5'>
+            <div className='flex flex-col justify-start w-full my-5'>
                 <h1 className='text-xl font-semibold'>Discover Integrations</h1>
                 <p className='mt-3 text-sm text-gray-700'>Make Tally even more powerful
                     by using these tools. Check out our roadmap for upcoming integrations
@@ -118,7 +120,7 @@ const FormIntegration = () => {
                                         {item.name === "webhooks" ? " Send events for new submissions to HTTP endpoints" : `Send submission to ${item.name}`}
                                     </p>
                                 </div>
-                                <div className='text-[#0070d7] font-semibold' onClick={() => handleConnect(item)}>Connect</div>
+                                <div className='text-[#0070d7] font-semibold cursor-pointer' onClick={() => handleConnect(item)}>Connect</div>
                             </div>
                         )
                     })

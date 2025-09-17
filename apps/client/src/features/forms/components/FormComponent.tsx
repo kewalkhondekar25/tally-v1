@@ -120,13 +120,13 @@ const FormComponent = () => {
     }, [isToolOpen, blockName]);
 
     return (
-        <div className='relative h-screen min-w-screen overflow-y-auto flex flex-col items-center'
+        <div className='relative h-screen w-screen overflow-y-auto flex flex-col items-center'
             onKeyDown={handleKeypress} tabIndex={0}>
             {
                 blocks.length >= 1 && formName && blocks[0].question?.length! >= 1 && (
                     <Button
                         onClick={() => handleSaveForm()}
-                        className='absolute top-1 right-1 z-50
+                        className='absolute top-1 right-1 z-50 cursor-pointer
                         bg-[#0070d7] h-6'>Publish</Button>
                 )
             }
@@ -135,25 +135,29 @@ const FormComponent = () => {
                 className="border-none text-3xl font-bold text-gray-700 mt-20 mb-5 
                 ring-0 focus-visible:ring-0 focus:ring-0 focus:outline-none 
                 shadow-none
-                placeholder:text-3xl placeholder:font-bold"
+                placeholder:text-3xl placeholder:font-bold
+                sm:w-72 sm:text-3xl sm:h-12
+                md:w-96 md:text-4xl"
                 placeholder='Form title'
                 autoFocus
                 onChange={(e) => setFormName(e.target.value)}
             />
             {
                 !isEditorOpen && (
-                    <>
+                    <div className=''>
                         <div className='flex flex-col text-gray-400 font-semibold gap-2'>
                             <div className='flex gap-2'>
                                 <File />
-                                <p>Press Enter to start from scratch</p>
+                                <p className='sm:text-base md:text-lg'>Press Enter to start from scratch</p>
                             </div>
                             <div className='flex gap-2'>
                                 <LayoutTemplate />
-                                <p>Use a template</p>
+                                <p className='sm:text-base md:text-lg'>Use a template</p>
                             </div>
                         </div>
-                        <div className='flex flex-col text-sm mt-3'>
+                        <div 
+                            className='flex flex-col text-sm mt-3
+                            sm:text-base sm:mt-5 md:text-lg'>
                             <p>Tally is a form builder that
                                 <span className='bg-[#fee3fc] text-[#f81ce5] font-bold'> works like a doc</span>.
                             </p>
@@ -161,7 +165,7 @@ const FormComponent = () => {
                                 <span className='bg-[#fee3fc] text-[#f81ce5] font-bold'> / </span> to insert form blocks
                             </p>
                         </div>
-                    </>
+                    </div>
                 )
             }
 
