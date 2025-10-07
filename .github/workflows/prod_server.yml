@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "apps/server/**"
+      - "packages/**"
 
 jobs:
   build-and-push:
@@ -35,16 +38,9 @@ jobs:
           script: |
             sudo docker pull kewalkhondekardev/tally-api:${{ github.sha }}
 
-            sudo docker run --rm \
-            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-            -e PORT=${{ secrets.PORT }} \
-            -e CORS_ORIGIN=${{ secrets.CORS_ORIGIN }} \
-            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-            kewalkhondekardev/tally-api:${{ github.sha }} \
-            npx prisma migrate deploy
-
             sudo docker stop tally-api || true
             sudo docker rm tally-api || true
+
             sudo docker run -d \
             --name tally-api \
             -p 8080:8080 \
