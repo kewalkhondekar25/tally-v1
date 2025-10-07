@@ -13,7 +13,10 @@ const FormShare = () => {
     const [form, setForm] = useState<File>();
     const [copied, setCopied] = useState(false);
 
-    const domain = import.meta.env.ENV_PROD ? import.meta.env.VITE_PROD_DOMAIN! : import.meta.env.VITE_DEV_DOMAIN  
+    const domain = import.meta.env.VITE_ENV_PROD === "true" 
+        ? import.meta.env.VITE_PROD_DOMAIN! 
+        : import.meta.env.VITE_DEV_DOMAIN;
+          
     const link = `${domain}/form/submit/${form?.slug}`;
 
     const handleCopy = async () => {

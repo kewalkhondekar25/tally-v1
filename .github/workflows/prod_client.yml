@@ -30,6 +30,15 @@ jobs:
 
       - name: Build React app
         working-directory: ./apps/client
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_ENV_PROD: ${{ secrets.VITE_ENV_PROD }}
+          VITE_DEV_DOMAIN: ${{ secrets.VITE_DEV_DOMAIN }}
+          VITE_PROD_DOMAIN: ${{ secrets.VITE_PROD_DOMAIN }}
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+          VITE_GOOGLE_LOGIN_URL: ${{ secrets.VITE_GOOGLE_LOGIN_URL }}
+          VITE_GOOGLE_SHEET_LOGIN_URL: ${{ secrets.VITE_GOOGLE_SHEET_LOGIN_URL }}
+          VITE_NOTION_LOGIN_URL: ${{ secrets.VITE_NOTION_LOGIN_URL }}
         run: pnpm run build
 
       - name: Sync build folder to S3
