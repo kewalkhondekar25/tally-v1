@@ -36,6 +36,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > tally.env
+            echo "PORT=${{ secrets.PORT }}" >> tally.env
+            echo "CORS_ORIGIN=${{ secrets.CORS_ORIGIN }}" >> tally.env
+            echo "DOMAIN=${{ secrets.DOMAIN }}" >> tally.env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> tally.env
             sudo docker pull kewalkhondekardev/tally-api:${{ github.sha }}
             sudo docker stop tally-api || true
             sudo docker rm tally-api || true
