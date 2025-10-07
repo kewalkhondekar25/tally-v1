@@ -131,6 +131,8 @@ const googleSheetAuthHandler: RequestHandler = asyncHandler ( async (req, res) =
     
     const user = (req as any).user;
     const { formId, formName } = req.query;
+    console.log(JSON.stringify(formName, null, 2));
+    
     
     const url = oauth2Client.generateAuthUrl({
         access_type: "offline",
@@ -144,6 +146,8 @@ const googleSheetAuthHandler: RequestHandler = asyncHandler ( async (req, res) =
 const googleSheetAuthHandlerCallback: RequestHandler = asyncHandler ( async (req,res) => {
     
     const code = req.query.code as string;
+    console.log("code", JSON.stringify(code, null, 2));
+    
     const state = JSON.parse(decodeURIComponent(req.query.state as string));
     console.log("state", state);
     
