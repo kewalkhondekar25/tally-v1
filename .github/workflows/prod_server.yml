@@ -27,8 +27,8 @@ jobs:
           context: .
           file: ./docker/Dockerfile.server
           push: true
-          tags: kewalkhondekardev/tally-api:${{ github.sha }} 
-      
+          tags: kewalkhondekardev/tally-api:${{ github.sha }}
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1
         with:
@@ -39,8 +39,7 @@ jobs:
             sudo docker pull kewalkhondekardev/tally-api:${{ github.sha }}
             sudo docker stop tally-api || true
             sudo docker rm tally-api || true
-            sudo docker run -d \
-            --name tally-api \
+            sudo docker run -d --name tally-api \
             -p 8080:8080 \
             -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
             -e PORT=${{ secrets.PORT }} \
@@ -56,4 +55,3 @@ jobs:
             -e NOTION_AUTH_URL=${{ secrets.NOTION_AUTH_URL }} \
             -e NOTION_REDIRECT_URI=${{ secrets.NOTION_REDIRECT_URI }} \
             kewalkhondekardev/tally-api:${{ github.sha }}
-
