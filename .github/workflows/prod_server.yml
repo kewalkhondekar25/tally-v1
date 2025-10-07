@@ -37,10 +37,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             sudo docker pull kewalkhondekardev/tally-api:${{ github.sha }}
-
             sudo docker stop tally-api || true
             sudo docker rm tally-api || true
-
             sudo docker run -d \
             --name tally-api \
             -p 8080:8080 \
