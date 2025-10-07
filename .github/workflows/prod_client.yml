@@ -20,7 +20,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'pnpm'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -31,7 +30,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build React app
-        working-directory: ./apps/client
+        run: |
+          cd ./apps/client
+          pnpm run build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_ENV_PROD: ${{ secrets.VITE_ENV_PROD }}
@@ -41,7 +42,6 @@ jobs:
           VITE_GOOGLE_LOGIN_URL: ${{ secrets.VITE_GOOGLE_LOGIN_URL }}
           VITE_GOOGLE_SHEET_LOGIN_URL: ${{ secrets.VITE_GOOGLE_SHEET_LOGIN_URL }}
           VITE_NOTION_LOGIN_URL: ${{ secrets.VITE_NOTION_LOGIN_URL }}
-        run: pnpm run build
 
       - name: Sync build folder to S3
         uses: jakejarvis/s3-sync-action@v0.5.1
