@@ -7,7 +7,7 @@ on:
     paths:
       - "apps/server/**"
       - "packages/**"
-      - "docker/Dockerimage.server"
+      - "docker/Dockerfile.server"
 
 jobs:
   build-and-push:
