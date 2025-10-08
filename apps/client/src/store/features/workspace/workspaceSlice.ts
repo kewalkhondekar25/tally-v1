@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface WorkspaceType {
-    workspaces: []
+    workspaces: [],
+    isLoading: boolean
 };
 
 const initialState: WorkspaceType = {
-    workspaces: []
+    workspaces: [],
+    isLoading: false
 }
 const workspaceSlice = createSlice({
     name: "workspace",
@@ -13,9 +15,12 @@ const workspaceSlice = createSlice({
     reducers: {
         setWorkspaces: (state, action) => {
             state.workspaces = action.payload
+        },
+        setIsLoading: (state) => {
+            state.isLoading = !state.isLoading
         }
     }
 });
 
-export const { setWorkspaces } = workspaceSlice.actions;
+export const { setWorkspaces, setIsLoading } = workspaceSlice.actions;
 export default workspaceSlice.reducer;

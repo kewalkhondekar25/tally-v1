@@ -1,5 +1,6 @@
 import useAxios from "@/hooks/useAxios"
 import type { AuthFormDataType } from "@/validations/auth.validations";
+import axios from "axios";
 
 const signupService = async (data: AuthFormDataType) => {
     try {
@@ -27,4 +28,19 @@ const loginService = async (data: AuthFormDataType) => {
     }
 };
 
-export { signupService, loginService };
+const logoutService = async () => {
+    
+    const url = import.meta.env.VITE_ENV_PROD === "false" ? 
+    import.meta.env.VITE_API_URL :
+    import.meta.env.VITE_PROD_DOMAIN; 
+
+    try {
+        const response = await axios.post(`${url}/auth/logout`, {}, { withCredentials: true })
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+export { signupService, loginService, logoutService };

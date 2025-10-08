@@ -80,7 +80,7 @@ const WorkspaceFolder = () => {
                 workspaces?.map((item, i) => {
                     return (
                         <div key={i} className="flex justify-between items-center group -my-2">
-                            <Accordion type="single" collapsible className='w-full'>
+                            <Accordion type="single" collapsible defaultValue="item-1" className='w-full'>
                                 <AccordionItem value="item-1">
                                     <div className='flex justify-between items-center'>
                                         <div className="flex items-center gap-2">

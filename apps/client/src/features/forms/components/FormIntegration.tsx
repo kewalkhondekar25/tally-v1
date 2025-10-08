@@ -25,16 +25,16 @@ const FormIntegration = () => {
     });
 
     //@ts-ignore
-    const res = workspaces.map(item1 => item1?.files.find(item2 => item2.id === formId)).filter(item => item !== undefined)
-    console.log("res", res);
-    
+    const res = workspaces.map(item1 => item1?.files.find(item2 => item2.id === formId)).filter(item => item !== undefined);
 
     const fetchSpreadSheet = async (formId: string) => {
         try {
             const response = await getSpreadSheet(formId!);
             const data = response?.data;
-            const { formId: fId, formName, spreadSheetId, spreadSheetUrl } = data;
-            setSpreadSheet({ formId: fId, formName, service: "google sheets", spreadSheetId, spreadSheetUrl })
+            if(data){
+                const { formId: fId, formName, spreadSheetId, spreadSheetUrl } = data;
+                setSpreadSheet({ formId: fId, formName, service: "google sheets", spreadSheetId, spreadSheetUrl })
+            }
         } catch (error) {
             console.log(error);
         }
@@ -44,19 +44,21 @@ const FormIntegration = () => {
         try {
             const response = await getNotionDb(formId);
             const data = response?.data;
-            setNotionDbData({ formId: data.formId, dbName: data.notionDbName, dbId: data.notionDbId, dbUrl: data.notionDbUrl, service: "notion"});
+            if(data){
+                setNotionDbData({ formId: data.formId, dbName: data.notionDbName, dbId: data.notionDbId, dbUrl: data.notionDbUrl, service: "notion"});
+            }
         } catch (error) {
             console.log(error);
         }
     };
 
-    const handleConnect = async (tool: { name: string, img: string }) => {
+    const handleConnect = async (tool: { name: string, img: string }, res: any) => {
         switch (tool.name) {
             case "google sheets":
-                window.location.href = `${import.meta.env.VITE_GOOGLE_SHEET_LOGIN_URL}?formId=${formId}&formName=${encodeURIComponent(res[0].name)}`;
+                window.location.href = `${import.meta.env.VITE_GOOGLE_SHEET_LOGIN_URL}?formId=${formId}&formName=${encodeURIComponent(res?.[0]?.name)}`;
                 break;
             case "notion":
-                window.location.href = `${import.meta.env.VITE_NOTION_LOGIN_URL}/${formId}/${encodeURIComponent(res[0].name)}`;
+                window.location.href = `${import.meta.env.VITE_NOTION_LOGIN_URL}/${formId}/${encodeURIComponent(res?.[0]?.name)}`;
                 break;
         }
     };
@@ -120,7 +122,7 @@ const FormIntegration = () => {
                                         {item.name === "webhooks" ? " Send events for new submissions to HTTP endpoints" : `Send submission to ${item.name}`}
                                     </p>
                                 </div>
-                                <div className='text-[#0070d7] font-semibold cursor-pointer' onClick={() => handleConnect(item)}>Connect</div>
+                                <div className='text-[#0070d7] font-semibold cursor-pointer' onClick={() => handleConnect(item, res)}>Connect</div>
                             </div>
                         )
                     })

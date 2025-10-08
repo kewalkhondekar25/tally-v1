@@ -75,7 +75,8 @@ const logout: RequestHandler = asyncHandler( async (req, res) => {
     
     const options = {
         httpOnly: true,
-        secure: true
+        secure: true,
+        path: "/"
     };
     return res.status(200).clearCookie("accessToken", options).json(
         new apiResponse(

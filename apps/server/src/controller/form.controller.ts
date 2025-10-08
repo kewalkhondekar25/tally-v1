@@ -177,7 +177,9 @@ const submitForm: RequestHandler = asyncHandler(async (req, res) => {
             range: "Responses!A1",
             valueInputOption: "USER_ENTERED",
             requestBody: {
-                values: [payload.response.map(item => item.answer)]
+                values: [payload.response.map(item => 
+                    Array.isArray(item?.answer) ? item.answer.join(", ") : item.answer
+                )]
             }
         })
 

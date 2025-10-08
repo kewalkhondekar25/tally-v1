@@ -19,7 +19,7 @@ import { Toaster } from "@/components/ui/sonner";
 import setCookie from './utils/cookie';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { getAllWorkspaces } from './features/workspaces/service';
-import { setWorkspaces } from './store/features/workspace/workspaceSlice';
+import { setWorkspaces, setIsLoading } from './store/features/workspace/workspaceSlice';
 import Thankyou from './pages/Thankyou';
 import { Loader2Icon } from "lucide-react";
 import NotFound from "./pages/NotFound";
@@ -29,7 +29,7 @@ function App() {
 
   const dispatch = useAppDispatch();
   const { isSidebarOpen } = useAppSelector(state => state.sidebar);
-
+  
   useEffect(() => {
     const fetchUser = async () => {
       await setCookie(dispatch);
