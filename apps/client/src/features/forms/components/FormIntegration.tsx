@@ -4,6 +4,7 @@ import { connectGoogleSheet, getNotionDb, getSpreadSheet } from '../service';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import useReduxState from '@/hooks/useReduxState';
+import { Lightbulb } from 'lucide-react';
 
 const FormIntegration = () => {
 
@@ -23,7 +24,7 @@ const FormIntegration = () => {
         dbName: "",
         dbUrl: ""
     });
-
+    const notionGuideUrl = "https://scalloped-anise-dc9.notion.site/Notion-Integration-28652ef0c8b680a48a13c4b4a0a3d89b?source=copy_link";
     //@ts-ignore
     const res = workspaces.map(item1 => item1?.files.find(item2 => item2.id === formId)).filter(item => item !== undefined);
 
@@ -31,7 +32,7 @@ const FormIntegration = () => {
         try {
             const response = await getSpreadSheet(formId!);
             const data = response?.data;
-            if(data){
+            if (data) {
                 const { formId: fId, formName, spreadSheetId, spreadSheetUrl } = data;
                 setSpreadSheet({ formId: fId, formName, service: "google sheets", spreadSheetId, spreadSheetUrl })
             }
@@ -44,8 +45,8 @@ const FormIntegration = () => {
         try {
             const response = await getNotionDb(formId);
             const data = response?.data;
-            if(data){
-                setNotionDbData({ formId: data.formId, dbName: data.notionDbName, dbId: data.notionDbId, dbUrl: data.notionDbUrl, service: "notion"});
+            if (data) {
+                setNotionDbData({ formId: data.formId, dbName: data.notionDbName, dbId: data.notionDbId, dbUrl: data.notionDbUrl, service: "notion" });
             }
         } catch (error) {
             console.log(error);
@@ -120,7 +121,19 @@ const FormIntegration = () => {
                                     </div>
                                     <p className='text-sm text-gray-500 font-normal'>
                                         {item.name === "webhooks" ? " Send events for new submissions to HTTP endpoints" : `Send submission to ${item.name}`}
+
                                     </p>
+                                    {
+                                        item.name === "notion" &&
+                                        <div className='flex items-center text-xs my-1 text-gray-500'>
+                                            <Lightbulb />
+                                            <span 
+                                                onClick={() => window.open(`${notionGuideUrl}`, "_blank")}
+                                                className='underline cursor-pointer'>
+                                                Guide
+                                            </span>
+                                        </div>
+                                    }
                                 </div>
                                 <div className='text-[#0070d7] font-semibold cursor-pointer' onClick={() => handleConnect(item, res)}>Connect</div>
                             </div>

@@ -76,10 +76,20 @@ const Landing = () => {
             </section>
 
             <section 
+                className="flex place-self-center mt-20 mx-5
+                lg:w-3xl w-screen">
+                <video
+                    className="rounded-lg" 
+                    src="https://res.cloudinary.com/kewalkhondekar/video/upload/v1759951933/formiq-tally/Formiq_-_Made_with_Clipchamp_dtlptc.mp4"
+                    loop={true} autoPlay muted>    
+                </video>
+            </section>
+
+            <section 
                 className="flex flex-col mx-3 mt-10
                 lg:max-w-[1000px] lg:mx-auto">
                 <div className="flex flex-col">
-                    <h1 className="text-xl sm:text-2xl font-semibold">A form builder like no other</h1>
+                    <h1 className="text-xl sm:text-2xl font-bold">A form builder like no other</h1>
                     <p className="mt-2 text-gray-600 font-semibold">Formiq makes it simple for anyone to build free online forms.
                         No need to code — just type your questions like you would in a doc.
                     </p>

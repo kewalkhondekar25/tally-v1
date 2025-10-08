@@ -127,7 +127,7 @@ const FormComponent = () => {
                     <Button
                         onClick={() => handleSaveForm()}
                         className='absolute top-1 right-1 z-50 cursor-pointer
-                        bg-[#0070d7] h-6'>Publish</Button>
+                        bg-[#0070d7] h-6 p-4'>Publish</Button>
                 )
             }
 
