@@ -62,7 +62,6 @@ const login: RequestHandler = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        domain: ".kewalkhondekar.dev",
         path: "/"
     }
 
@@ -80,7 +79,6 @@ const logout: RequestHandler = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        domain: ".kewalkhondekar.dev",
         path: "/"
     };
     return res.status(200).clearCookie("accessToken", options).json(
