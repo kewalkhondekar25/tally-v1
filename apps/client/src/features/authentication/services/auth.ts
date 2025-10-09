@@ -30,9 +30,9 @@ const loginService = async (data: AuthFormDataType) => {
 
 const logoutService = async () => {
     
-    const url = import.meta.env.VITE_ENV_PROD === "false" ? 
-    import.meta.env.VITE_API_URL :
-    import.meta.env.VITE_PROD_DOMAIN; 
+    const url =  import.meta.env.VITE_API_URL;
+
+    console.log("Logging out");
 
     try {
         const response = await axios.post(`${url}/auth/logout`, {}, { withCredentials: true })
