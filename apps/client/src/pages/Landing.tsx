@@ -76,11 +76,12 @@ const Landing = () => {
             </section>
 
             <section 
-                className="flex place-self-center mt-20 mx-5
-                lg:w-3xl w-screen">
+                className="flex place-self-center mt-20 w-screen
+                md:w-2xl
+                lg:w-3xl">
                 <video
-                    className="rounded-lg" 
-                    src="https://res.cloudinary.com/kewalkhondekar/video/upload/v1759951933/formiq-tally/Formiq_-_Made_with_Clipchamp_dtlptc.mp4"
+                    className="rounded-lg border-1" 
+                    src="https://res.cloudinary.com/kewalkhondekar/video/upload/v1759995648/formiq-tally/formiq-landingpage-clip_il4rth.mp4"
                     loop={true} autoPlay muted>    
                 </video>
             </section>
