@@ -81,6 +81,8 @@ const logout: RequestHandler = asyncHandler(async (req, res) => {
         sameSite: "none",
         path: "/"
     };
+    console.log("Logout Endpoint hit");
+    
     return res.status(200).clearCookie("accessToken", options).json(
         new apiResponse(
             true,
