@@ -58,9 +58,12 @@ const login: RequestHandler = asyncHandler(async (req, res) => {
 
     const token = generateToken(user.id, user.email);
 
-    const options = {
+    const options: CookieOptions = {
         httpOnly: true,
-        secure: true
+        secure: true,
+        sameSite: "none",
+        domain: ".kewalkhondekar.dev",
+        path: "/"
     }
 
     return res.status(200).cookie("accessToken", token, options).json(new apiResponse(
